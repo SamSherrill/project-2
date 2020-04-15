@@ -1,10 +1,37 @@
-.nav-container {
+body {
+    background-color: #1C3C51
+    
+}
+
+.navbar{
+    background-color: #171A21;
+    width: 100%;
+    color: white;
     padding: 20px;
+}
+.input {
+    background-color: lightgray;
 }
 .input-container{
     width: 80%;
     padding: 20px;
+    background-color: #1C3C51;
 }
 .tables-container {
     padding: 20px;
+    background-color:  #1C3C51;
+    color: lightgrey;
+}
+
+.footer {
+    background-color: #171A21;
+    color: white;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+.website-title {
+    color: lightgrey;
 }
