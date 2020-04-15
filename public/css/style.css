@@ -1,3 +1,10 @@
+.nav-container {
+    padding: 20px;
+}
 .input-container{
-    width: 70%;
+    width: 80%;
+    padding: 20px;
+}
+.tables-container {
+    padding: 20px;
 }
