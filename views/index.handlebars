@@ -1,27 +1,27 @@
-<div class="container nav-container">
-    <nav class="navbar" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
-            <a class="navbar-item" href="https://bulma.io">
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="https://bulma.io">
                 <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
-            </a>
+        </a>
 
-            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
-                data-target="navbarBasicExample">
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
+        <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
+            data-target="navbarBasicExample">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>                
+            <span aria-hidden="true"></span>
+        </a>
+    </div>
+
+    <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start">
+            <a class="navbar-item website-title">
+                <strong> Steam Library Comparer </strong>
             </a>
         </div>
+    </div>
+</nav>
 
-        <div id="navbarBasicExample" class="navbar-menu">
-            <div class="navbar-start">
-                <a class="navbar-item">
-                    Steam Library Comparer
-                </a>
-            </div>
-        </div>
-    </nav>
-</div>
 <div class="container input-container">
     <div class="columns">
         <div class="column">
@@ -43,27 +43,34 @@
         <input class="button" type="submit" value="Submit input">
     </div>
 </div>
+
 <div class="container tables-container">
     <div class="columns">
         <div class="column is-one-third user-one-column">
-            <table class="table">
+            <table class="table is-striped">
                 <thead>
                     <tr>
-                        <th>
-                            User 1 Games
-                        </th>
-
+                        User 
                     </tr>
                 </thead>
                 <tbody>
                     <ul>
-                        <li>Game 1</li>
+                        <li>Stellaris</li>
+                        <li>Chrono Trigger</li>
+                        <li>DOTA 2</li>
+                        <li>RimWorld</li>
+                        <li>Civilization 5</li>
+                        <li>Civilization 6</li>
+                        <li>Mount and Blade: Bannerlord</li>
+                        <li>Rise to Ruins</li>
+                        <li>CS:GO</li>
+                        <li>Path of Exile</li>
                     </ul>
                 </tbody>
             </table>
         </div>
         <div class="column is-one-third user-two-column">
-            <table class="table">
+            <table class="table is-striped">
                 <thead>
                     <tr>
                         User 2 Games
@@ -71,24 +78,75 @@
                 </thead>
                 <tbody>
                     <ul>
-                        <li>Game 1</li>
+                        <li>Team Fortress 2</li>
+                        <li>Stellaris</li>
+                        <li>DOTA 2</li>
+                        <li>Portal 2</li>
+                        <li>Guns of Icarus</li>
+                        <li>Civilization 6</li>
+                        <li>Mount and Blade: Bannerlord</li>
+                        <li>Goat Simulator</li>
+                        <li>CS:GO</li>
+                        <li>Path of Exile</li>
                     </ul>
                 </tbody>
             </table>
         </div>
         <div class="column is-one-third shared-games-column">
-            <table class="table">
+            <table class="table is-striped">
                 <thead>
                     <tr>
-                        Shared Games
+                        <th>Shared Games</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <ul>
-                        <li>Game 1</li>
-                    </ul>
+                    <tr>
+                        <td>Team Fortress 2*</td>
+                    </tr>
+                    <tr>
+                        <td>Stellaris</td>
+                    </tr>
+                    <tr>
+                        <td>DOTA 2</td>
+                    </tr>
+                    <tr>
+                        <td>Civilization 6</td>
+                    </tr>
+                    <tr>
+                        <td>Mount and Blade: Bannerlord</td>
+                    </tr>
+                    <tr>
+                        <td>CS:GO</td>
+                    </tr>
+                    <tr>
+                        <td>Path of Exile</td>
+                    </tr>
+                    {{!-- <ul>
+                        <li>Team Fortress 2*</li>
+                        <li>Stellaris</li>
+                        <li>DOTA 2</li>
+                        <li>Civilization 6</li>
+                        <li>Mount and Blade: Bannerlord</li>
+                        <li>CS:GO</li>
+                        <li>Path of Exile</li>
+                    </ul> --}}
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td>* = Games that are free to play; you can download these now to play with your friend!</td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>
 </div>
+
+<footer class="footer">
+  <div class="content has-text-centered">
+    <p>
+      <strong class="website-title"> Steam Library Comparer </strong></br>
+      The source code is licensed
+      <a href="http://opensource.org/licenses/mit-license.php" style="color: grey">MIT</a>.
+    </p>
+  </div>
+</footer>
