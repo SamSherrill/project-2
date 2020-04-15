@@ -1,13 +1,12 @@
 module.exports = function (sequelize, DataTypes) {
   const Game = sequelize.define("Game", {
     name: DataTypes.STRING,
-    appId: DataTypes.INTEGER,
-    website: DataTypes.INTEGER,
-    headerImage: DataTypes.INTEGER,
-    price: DataTypes.STRING,
-    windows: DataTypes.STRING,
-    mac: DataTypes.STRING,
-    linux: DataTypes.STRING
+    appId: DataTypes.STRING,
+    website: DataTypes.STRING,
+    headerImage: DataTypes.STRING,
+    windows: DataTypes.BOOLEAN,
+    mac: DataTypes.BOOLEAN,
+    linux: DataTypes.BOOLEAN
   });
 
   Game.associate = function (models) {
