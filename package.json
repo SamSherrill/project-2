@@ -11,15 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SamSherrill/project-2"
+    "url": "git+https://github.com/SamSherrill/project-2.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/SamSherrill/project-2"
+    "url": "https://github.com/SamSherrill/project-2/issues"
   },
-  "homepage": "https://github.com/SamSherrill/project-2",
+  "homepage": "https://github.com/SamSherrill/project-2#readme",
   "dependencies": {
     "eslint": "^4.19.1",
     "express": "^4.17.1",
