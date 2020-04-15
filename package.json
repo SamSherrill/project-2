@@ -11,15 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jonathanjwatson/lego-tracker.git"
+    "url": "git+https://github.com/SamSherrill/project-2.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/jonathanjwatson/lego-tracker/issues"
+    "url": "https://github.com/SamSherrill/project-2/issues"
   },
-  "homepage": "https://github.com/jonathanjwatson/lego-tracker#readme",
+  "homepage": "https://github.com/SamSherrill/project-2#readme",
   "dependencies": {
     "eslint": "^4.19.1",
     "express": "^4.17.1",
