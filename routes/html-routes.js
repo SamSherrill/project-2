@@ -16,13 +16,14 @@ module.exports = function (app) {
       where: {
         // BUT this is almost for sure not ID
         personaName: user,
-      }
+      },
+      include: [db.Game]
     })
       .then((user) => {
         // check our DB for the user. IF they exist their with their games list,
         // then we display those in the browser with res.render("SteamUser");
-        // res.render("SteamUser", {user});
         console.log("user in .then: ", user);
+        res.render("SteamUser", {user});
       })
       .catch((err) => {
         console.log(err);
