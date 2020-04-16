@@ -8,7 +8,7 @@ module.exports = function (sequelize, DataTypes) {
 
   SteamUser.associate = function (models) {
     SteamUser.belongsToMany(models.Game, {
-      through: "steamUserGames",
+      through: "SteamUserGames",
       foreignKey: "steamUserId",
     });
   };
