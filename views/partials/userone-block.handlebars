@@ -2,11 +2,16 @@
     <table class="table is-striped">
         <thead>
             <tr>
-                {{user.personaName}}
+                <th>{{user.personaName}}</th>
             </tr>
         </thead>
         <tbody>
-            <ul>
+            {{#each games}}
+            <tr >
+                <td>{{name}}</td>
+            </tr>
+            {{/each}}
+            {{!-- <ul>
                 <li>Stellaris</li>
                 <li>Chrono Trigger</li>
                 <li>DOTA 2</li>
@@ -17,7 +22,7 @@
                 <li>Rise to Ruins</li>
                 <li>CS:GO</li>
                 <li>Path of Exile</li>
-            </ul>
+            </ul> --}}
         </tbody>
     </table>
 </div>
