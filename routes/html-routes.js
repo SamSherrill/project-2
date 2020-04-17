@@ -21,7 +21,7 @@ module.exports = function (app) {
         // check our DB for the user. IF they exist their with their games list,
         // then we display those in the browser with res.render("SteamUser");
         console.log("user in .then: ", user);
-        res.render("SteamUser", { user });
+        res.render("index", { user });
       })
       .catch((err) => {
         console.log(err);
