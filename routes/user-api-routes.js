@@ -68,11 +68,14 @@ module.exports = function (app) {
         personaName: req.params.personaName,
       },
     }).then((user) => {
+      console.log("User in the app.get(/api.steamUsers/:personaName function .then", user);
+      console.log("User object from database: ", user);
       res.json(user);
     });
   });
 };
 
+// user.js model:
 //   const SteamUser = sequelize.define("SteamUser", {
 //     personaName: DataTypes.STRING,
 //     steamId: DataTypes.STRING,

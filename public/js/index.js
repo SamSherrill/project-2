@@ -6,8 +6,17 @@ $(document).ready(function () {
     // var userTwo = $("#user-two").val().trim();
     console.log(userOne);
     // console.log(userTwo);
-    $.post("/api/steamUsers", { user: userOne });
+    $.post("/api/steamUsers", {
+      user: userOne
+    });
+    $.get("/api/steamUsers/" + userOne, {
+      user: userOne
+    })
+      .done((res) => {
+        console.log("res in .get on index.js", res);
+      });
 
+    //The following block of user code is done in the user-api-routes.js
     // We need to save the usernames
     // Some other file is going to have to 1st check our DB for that user
     //
@@ -17,6 +26,8 @@ $(document).ready(function () {
     // and get the user's ID #
     // then we'll need to use the user ID # to get the user's game's list
     // Steam API call this GetOwnedGames ---
+
+    // user-api-routes.js will res.render("SteamUser")
   });
 });
 
