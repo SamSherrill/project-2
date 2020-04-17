@@ -82,7 +82,7 @@ module.exports = function (app) {
         user = [{user: user.dataValues}];
         // check our DB for the user. IF they exist their with their games list,
         // then we display those in the browser with res.render("SteamUser");
-        res.render("index", {
+        res.render("SteamUser", {
           user: user,
         });
       })
@@ -138,7 +138,7 @@ module.exports = function (app) {
     getTwoUsers(userOne, userTwo, (response) => {
       const userObj = response;
       console.log("This is the userObj: ", userObj);
-      res.render("index", {
+      res.render("SteamUser", {
         user: userObj
       });
     });
