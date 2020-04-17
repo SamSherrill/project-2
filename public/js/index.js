@@ -7,14 +7,14 @@ $(document).ready(function () {
     console.log(userOne);
     // console.log(userTwo);
     $.post("/api/steamUsers", {
-      user: userOne
-    });
-    $.get("/api/steamUsers/" + userOne, {
-      user: userOne
-    })
-      .done((res) => {
+      user: userOne,
+    }).then(
+      $.get("/SteamUsers/" + userOne, {
+        user: userOne,
+      }).done((res) => {
         console.log("res in .get on index.js", res);
-      });
+      })
+    );
 
     //The following block of user code is done in the user-api-routes.js
     // We need to save the usernames
