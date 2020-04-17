@@ -80,7 +80,7 @@ module.exports = function (app) {
       include: [db.Game],
     })
       .then((user) => {
-        user = user.dataValues;
+        user = [{user: user.dataValues}];
         // check our DB for the user. IF they exist their with their games list,
         // then we display those in the browser with res.render("SteamUser");
         console.log("user in .then: ", user);
