@@ -1,39 +1,51 @@
 body {
-    background-color: #1C3C51;
-    margin-bottom: 60px;
+  background-color: #1c3c51;
+  margin-bottom: 60px;
 }
-
-.navbar{
-    background-color: #171A21;
+table {
     width: 100%;
+}
+#username {
+    background-color: #171a21;
     color: white;
-    padding: 20px;
+}
+tbody{
+    color: white;
+}
+td{
+    background-color: gray;
+}
+.navbar {
+  background-color: #171a21;
+  width: 100%;
+  color: white;
+  padding: 20px;
 }
 .input {
-    background-color: lightgray;
+  background-color: lightgray;
 }
-.input-container{
-    width: 80%;
-    padding: 20px;
-    background-color: #1C3C51;
+.input-container {
+  width: 80%;
+  padding: 20px;
+  background-color: #1c3c51;
 }
 .tables-container {
-    padding: 20px;
-    background-color:  #1C3C51;
-    color: lightgrey;
+  padding: 20px;
+  background-color: #1c3c51;
+  color: lightgrey;
 }
 
 .footer {
-    background-color: #171A21;
-    color: white;
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    padding: 10px;
-    font-size: smaller;
+  background-color: #171a21;
+  color: white;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  padding: 10px;
+  font-size: smaller;
 }
 
 .website-title {
-    color: lightgrey;
+  color: lightgrey;
 }

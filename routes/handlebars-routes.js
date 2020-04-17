@@ -70,7 +70,6 @@ module.exports = function (app) {
   app.get("/SteamUser/:username", function (req, res) {
     const user = req.params.username;
     // const user = "dabigcheezey";
-    console.log("user in when 1st defined: ", user);
     // use sequelize to find the user in our DB
     db.SteamUser.findOne({
       where: {
@@ -83,7 +82,6 @@ module.exports = function (app) {
         user = [{user: user.dataValues}];
         // check our DB for the user. IF they exist their with their games list,
         // then we display those in the browser with res.render("SteamUser");
-        console.log("user in .then: ", user);
         res.render("index", {
           user: user,
         });
@@ -126,7 +124,6 @@ module.exports = function (app) {
         user: res.dataValues
       };
       userArray.push(userTwoObject);
-      console.log(userArray);
       cb(userArray);
     });
   }
