@@ -1,27 +1,24 @@
 $(document).ready(function () {
-    console.log("ready!");
-    $(".username-submit").on("click", function (event) {
-        event.preventDefault();
-        var userOne = $("#user-one").val().trim();
-        // var userTwo = $("#user-two").val().trim();
-        console.log(userOne);
-        // console.log(userTwo);
+  console.log("ready!");
+  $(".username-submit").on("click", function (event) {
+    event.preventDefault();
+    var userOne = $("#user-one").val().trim();
+    // var userTwo = $("#user-two").val().trim();
+    console.log(userOne);
+    // console.log(userTwo);
+    $.post("/api/steamUsers", { user: userOne });
 
-        // We need to save the usernames
-        // Some other file is going to have to 1st check our DB for that user
-        // 
+    // We need to save the usernames
+    // Some other file is going to have to 1st check our DB for that user
+    //
 
-        // Step 2 or beyond:
-        // Then this other file is oging to need to go to the steam API
-        // and get the user's ID #
-        // then we'll need to use the user ID # to get the user's game's list
-        // Steam API call this GetOwnedGames ---
-    });
+    // Step 2 or beyond:
+    // Then this other file is oging to need to go to the steam API
+    // and get the user's ID #
+    // then we'll need to use the user ID # to get the user's game's list
+    // Steam API call this GetOwnedGames ---
+  });
 });
-
-
-
-
 
 // cat.js example, which was the index.js for that activity:
 

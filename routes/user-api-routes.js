@@ -9,24 +9,25 @@ module.exports = function (app) {
   const axios = require("axios");
   const apiKey = process.env.API_KEY || "58B845E0858DDB3A73B47D71B787198A";
 
-  function getUserInfo(apiKey, cb) {
-    const user = "sammysticks";
+  function getUserInfo(apiKey, user, cb) {
     const queryVanityUrl = `http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${apiKey}&vanityurl=${user}`;
 
     axios.get(queryVanityUrl).then(function (res) {
-      console.log(res.data.response.steamid);
       let userId = res.data.response.steamid;
       const querySteamUserUrl = `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${apiKey}&steamids=${userId}`;
       axios.get(querySteamUserUrl).then(function (res) {
-        console.log(res.data.response.players);
-        let steamUser = {
-          personaName: res.data.response.players[0].personaname,
-          steamId: res.data.response.players[0].steamid,
-          profileUrl: res.data.response.players[0].profileurl,
-          avatarUrl: res.data.response.players[0].avatarmedium,
-        };
-        return cb(steamUser);
-      });
+        if(res.data.response.players.length > 0){
+          let steamUser = {
+            personaName: res.data.response.players[0].personaname,
+            steamId: res.data.response.players[0].steamid,
+            profileUrl: res.data.response.players[0].profileurl,
+            avatarUrl: res.data.response.players[0].avatarmedium,
+          };
+          return cb(steamUser);
+        }else{
+          return console.log("Couldn't find user!")
+        }
+      })
     });
   }
 
@@ -37,10 +38,21 @@ module.exports = function (app) {
   //   });
 
   app.post("/api/steamUsers", function (req, res) {
-    getUserInfo(apiKey, (steamUser) => {
-      db.SteamUser.create(steamUser).then(function (dbPost) {
-        res.json(dbPost);
-      });
+    db.SteamUser.findOne({
+      where: {
+        personaName: req.body.user,
+      },
+    }).then((user) => {
+      console.log(user);
+      if (!user) {
+        getUserInfo(apiKey, req.body.user, (steamUser) => {
+          db.SteamUser.create(steamUser).then(function (dbPost) {
+            res.json(dbPost);
+          });
+        });
+      }else{
+        console.log("user already exists!");
+      }
     });
   });
 
@@ -50,10 +62,10 @@ module.exports = function (app) {
     });
   });
 
-  app.get("/api/steamUsers/:steamUserId", function (req, res) {
+  app.get("/api/steamUsers/:personaName", function (req, res) {
     db.SteamUser.findOne({
       where: {
-        steamId: req.params.steamId,
+        personaName: req.params.personaName,
       },
     }).then((user) => {
       res.json(user);
