@@ -3,22 +3,36 @@ $(document).ready(function () {
   $(".username-submit").on("click", function (event) {
     event.preventDefault();
     var userOne = $("#user-one").val().trim();
-    var userTwo = $("#user-two").val().trim();
+    if( $("#user-two").val().trim().length > 0){
+      var userTwo = $("#user-two").val().trim();
+    }
     // var userTwo = $("#user-two").val().trim();
     console.log(userOne);
 
     // console.log(userTwo);
-    $.post("/api/steamUsers", {
-      userOne: userOne,
-      userTwo: userTwo
-    }).then(
-      $.get("/SteamUsers/" + userOne + "/" + userTwo, {
+    if(userTwo){
+      console.log(userTwo);
+      $.post("/api/steamUsers", {
         userOne: userOne,
-      }).done((res) => {
-        console.log("res in .get on index.js", res);
-      })
-    );
-
+        userTwo: userTwo
+      }).then(
+        $.get("/SteamUsers/" + userOne + "/" + userTwo, {
+          userOne: userOne,
+        }).done((res) => {
+          // console.log("res in .get on index.js", res);
+        })
+      );
+    } else{
+      $.post("/api/steamUsers", {
+        userOne: userOne
+      }).then(
+        $.get("/SteamUser/" + userOne, {
+          userOne: userOne,
+        }).done((res) => {
+          // console.log("res in .get on index.js", res);
+        })
+      );
+    };
     //The following block of user code is done in the user-api-routes.js
     // We need to save the usernames
     // Some other file is going to have to 1st check our DB for that user
