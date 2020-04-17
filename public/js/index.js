@@ -10,10 +10,10 @@ $(document).ready(function () {
       user: userOne
     });
     $.get("/api/steamUsers/" + userOne, {
-        user: userOne
-      })
+      user: userOne
+    })
       .done((res) => {
-        console.log("res in .get on index.js", res)
+        console.log("res in .get on index.js", res);
       });
 
     //The following block of user code is done in the user-api-routes.js
