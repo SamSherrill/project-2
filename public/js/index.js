@@ -3,14 +3,17 @@ $(document).ready(function () {
   $(".username-submit").on("click", function (event) {
     event.preventDefault();
     var userOne = $("#user-one").val().trim();
+    var userTwo = $("#user-two").val().trim();
     // var userTwo = $("#user-two").val().trim();
     console.log(userOne);
+
     // console.log(userTwo);
     $.post("/api/steamUsers", {
-      user: userOne,
+      userOne: userOne,
+      userTwo: userTwo
     }).then(
-      $.get("/SteamUsers/" + userOne, {
-        user: userOne,
+      $.get("/SteamUsers/" + userOne + "/" + userTwo, {
+        userOne: userOne,
       }).done((res) => {
         console.log("res in .get on index.js", res);
       })
