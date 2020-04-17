@@ -11,7 +11,7 @@ module.exports = function (app) {
       let userId = res.data.response.steamid;
       const querySteamUserUrl = `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${apiKey}&steamids=${userId}`;
       axios.get(querySteamUserUrl).then(function (res) {
-        if(res.data.response.players.length > 0){
+        if (res.data.response.players.length > 0) {
           let steamUser = {
             personaName: res.data.response.players[0].personaname,
             steamId: res.data.response.players[0].steamid,
@@ -19,7 +19,7 @@ module.exports = function (app) {
             avatarUrl: res.data.response.players[0].avatarmedium,
           };
           return cb(steamUser);
-        }else{
+        } else {
           return console.log("Couldn't find user!");
           // redirect to a 404 page user not found
         }
@@ -40,7 +40,7 @@ module.exports = function (app) {
             res.json(dbPost);
           });
         });
-      }else{
+      } else {
         console.log("user already exists!");
       }
     });
@@ -80,11 +80,13 @@ module.exports = function (app) {
       include: [db.Game],
     })
       .then((user) => {
+        user = user.dataValues;
         // check our DB for the user. IF they exist their with their games list,
         // then we display those in the browser with res.render("SteamUser");
         console.log("user in .then: ", user);
-        res.render("index", { user, games: user.Games });
-        //{ user, legos: user.Legos }
+        res.render("index", {
+          user: user,
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -96,7 +98,76 @@ module.exports = function (app) {
         // data passed to handlebars files comes through the html-routes file
       });
   });
+
+
+  // app.get("/SteamUser/:twoUsers", function (req, res) {
+  // SteamUser/sammysticks&dabigcheezey
+  function getTwoUsers(userOne, userTwo, cb) {
+    const userArray = [];
+    db.SteamUser.findOne({
+      where: {
+        // BUT this is almost for sure not ID
+        personaName: userOne,
+      },
+      include: [db.Game],
+    }).then((res) => {
+      const userOneObject = {
+        user: res.dataValues
+      };
+      userArray.push(userOneObject);
+    });
+    (db.SteamUser.findOne({
+      where: {
+        personaName: userTwo
+      },
+      include: [db.Game]
+    })).then((res) => {
+      const userTwoObject = {
+        user: res.dataValues
+      };
+      userArray.push(userTwoObject);
+      console.log(userArray);
+      cb(userArray);
+    });
+  }
+
+  app.get("/SteamUsers/:usernameOne/:usernameTwo", function (req, res) {
+    const userOne = req.params.usernameOne;
+    const userTwo = req.params.usernameTwo;
+    // const user = "dabigcheezey";
+    //console.log("user in when 1st defined: ", user);
+    // use sequelize to find the user in our DB
+
+    getTwoUsers(userOne, userTwo, (response) => {
+      const userObj = response;
+      console.log("This is the userObj: ", userObj);
+      res.render("index", {
+        user: userObj
+      });
+    });
+
+    // check our DB for the user. IF they exist their with their games list,
+    // then we display those in the browser with res.render("SteamUser");
+    // console.log("user in .then: ", user);
+    //   res.render("index", {
+    //     userOne,
+    //     userTwo,
+    //     gamesOne: userOne.Games,
+    //     //gamesTwo: userTwo.Games,
+    //   });
+    //   //{ user, legos: user.Legos }
+    // })
+    // .catch((err) => {
+    //   console.log(err);
+    //   // If they aren't in our DB, then we use a .catch()
+    //   // that will need to use user-api-routes.js &
+    //   // user-games-api-routes.js to do the necessary calls to Steam's API
+
+    //   // pass in data
+    //   // data passed to handlebars files comes through the html-routes file
+  });
 };
+
 
 // USER.JS CODE:
 

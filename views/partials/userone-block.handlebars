@@ -1,3 +1,5 @@
+<div class = "columns">
+{{#each user}}
 <div class="column is-one-third user-one-column">
     <table class="table is-striped">
         <thead>
@@ -6,8 +8,8 @@
             </tr>
         </thead>
         <tbody>
-            {{#each games}}
-            <tr >
+            {{#each user.Games}}
+            <tr>
                 <td>{{name}}</td>
             </tr>
             {{/each}}
@@ -25,4 +27,6 @@
             </ul> --}}
         </tbody>
     </table>
+</div>
+{{/each}}      
 </div>
