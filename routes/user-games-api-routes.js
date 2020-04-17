@@ -4,3 +4,14 @@
 //get game details
 //https://store.steampowered.com/api/appdetails?appids=7670
 //"categories" {id: 1, description: "Multi-player"}
+
+var db = require("../models");
+module.exports = function (app) {
+  const axios = require("axios");
+  const apiKey = process.env.API_KEY || "58B845E0858DDB3A73B47D71B787198A";
+  const 
+
+  function getGamesList(){
+
+  }
+}
