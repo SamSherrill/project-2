@@ -25,9 +25,9 @@ module.exports = function (app) {
           };
           return cb(steamUser);
         }else{
-          return console.log("Couldn't find user!")
+          return console.log("Couldn't find user!");
         }
-      })
+      });
     });
   }
 
