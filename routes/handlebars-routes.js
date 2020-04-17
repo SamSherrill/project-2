@@ -73,19 +73,18 @@ module.exports = function (app) {
     console.log("user in when 1st defined: ", user);
     // use sequelize to find the user in our DB
     db.SteamUser.findOne({
-      where: {
-        // BUT this is almost for sure not ID
-        personaName: user,
-      },
-      include: [db.Game],
-    })
+        where: {
+          // BUT this is almost for sure not ID
+          personaName: user,
+        },
+        include: [db.Game],
+      })
       .then((user) => {
         // check our DB for the user. IF they exist their with their games list,
         // then we display those in the browser with res.render("SteamUser");
         console.log("user in .then: ", user);
         res.render("index", {
-          user,
-          games: user.Games
+          user: user.dataValues,
         });
       })
       .catch((err) => {
@@ -111,10 +110,10 @@ module.exports = function (app) {
       },
       include: [db.Game],
     }).then((res) => {
-      const userOne = {
-        userOne: res.dataValues
+      const userOneObject = {
+        user: res.dataValues
       };
-      userArray.push(userOne);
+      userArray.push(userOneObject);
     });
     (db.SteamUser.findOne({
       where: {
@@ -122,25 +121,30 @@ module.exports = function (app) {
       },
       include: [db.Game]
     })).then((res) => {
-      const userTwo = {
-        userTwo: res.dataValues
+      const userTwoObject = {
+        user: res.dataValues
       };
-      userArray.push(userTwo);
+      userArray.push(userTwoObject);
       console.log(userArray);
       cb(userArray);
     });
   }
 
-  app.get("/SteamUser/:usernameOne/:usernameTwo", function (req, res) {
+  app.get("/SteamUsers/:usernameOne/:usernameTwo", function (req, res) {
     const userOne = req.params.usernameOne;
     const userTwo = req.params.usernameTwo;
     // const user = "dabigcheezey";
     //console.log("user in when 1st defined: ", user);
     // use sequelize to find the user in our DB
 
-    getTwoUsers(userOne, userTwo, (res) => {
-      console.log("This is the res: ", res);
+    getTwoUsers(userOne, userTwo, (response) => {
+      const userObj = response;
+      console.log("This is the userObj: ", userObj);
+      res.render("index", {
+        user: userObj
+      });
     });
+
     // check our DB for the user. IF they exist their with their games list,
     // then we display those in the browser with res.render("SteamUser");
     // console.log("user in .then: ", user);
