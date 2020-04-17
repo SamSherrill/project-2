@@ -70,54 +70,5 @@ module.exports = function (app) {
   });
 };
 
-// ****** PSEUDO CODE HERE:
-
-// What do we need to do in this folder? Let's pseudo code that.
-
-// This file will reference our models. We will need to require them.
-// Also, we'll need to require expres & setup a router.
-
-// To pull the data we need to display, we will almost certainly use the following code:
-// ****** END PSEUDO CODE
-
-
-// router.get("/users", function (req, res) {
-//   db.User.findAll()
-//     .then((users) => {
-//       console.log(users);
-//       res.render("all-users", { users });
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//       res.status(500);
-//       res.json({
-//         error: true,
-//       });
-//     });
-// });
-
-// router.get("/users/:id", function (req, res) {
-//   db.User.findOne({
-//     where: {
-//       id: req.params.id,
-//     },
-//     include: [
-//       {
-//         model: db.Lego,
-//       },
-//     ],
-//   })
-//     .then((user) => {
-//       console.log(user.Legos);
-//       res.render("single-user", { user, legos: user.Legos });
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//       res.status(500);
-//       res.json({
-//         error: true,
-//       });
-//     });
-// });
 
 
