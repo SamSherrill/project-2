@@ -5,8 +5,6 @@
 //https://store.steampowered.com/api/appdetails?appids=7670
 //"categories" {id: 1, description: "Multi-player"}
 
-
-
 //pseudo code from David Saturday morning:
 //Make API call to get games owned list: http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=F83481CE586D90CD0924F6576AA13DEC&steamid=76561198071626037&format=json&include_appinfo=true
 //loop through games
@@ -29,67 +27,68 @@ module.exports = function (app) {
   const steamID = "76561198035672130";
   // that steamID is hard coded for sammysticks' Steam ID #. ID numbers are required to hit the API.
 
-  app.get("/api/games", ((req, res) => {
-    // getGamesList(apiKey, steamID);
-    const ownedGamesUrl = `http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${apiKey}&steamid=${steamID}&format=json&include_appinfo=true`;
-
-    axios.get(ownedGamesUrl).then(async (response) => {
-      let singleGame = {};
-      //stores the database id for the user who's games are being found. Is used later to create join table rows(what games they own)
-      let currentUserSteamId = await getSteamUserIdBySteamId(steamID);
-      for (let i = 0; i < response.data.response.games.length; i++) {
-        const gameFromDatabase = await db.Game.findOne({
-          where: {
-            appId: response.data.response.games[i].appid
-          }
-        });
-        if (gameFromDatabase === null) {
-          // TODO: Make an API call,
-          // wait for the call to complete,
-          //  then update the db.Game.create to include that additional data
-          singleGame = await db.Game.create({
-            name: response.data.response.games[i].name,
-            appId: response.data.response.games[i].appid
-          });
-        } else {
-          singleGame = gameFromDatabase;
-        }
-        //function that creates the row connecting the user to the games they own in the join table(SteamUserGames)
-        await createJoinRow(currentUserSteamId, singleGame.id);
-
-      }
-      await res.json({
-        success: true
-      });
-    }).catch(err => {
-      console.log(err);
-    });
-  }));
-
   //function that creates the row connecting the user to the games they own in the join table(SteamUserGames)
-  async function createJoinRow(steamUserId, gameId){
-    db.SteamUserGames
-      .create({
-        steamUserId,
-        gameId
-      })
+  async function createJoinRow(steamUserId, gameId) {
+    db.SteamUserGames.create({
+      steamUserId,
+      gameId,
+    })
       .then(() => console.log("success"))
       //console logs error type if there was ant attempt to put in duplicate value
-      .catch(err=>console.log(err.original.code));
+      .catch((err) => console.log(err.original.code));
   }
 
   //Just helps in getting the id from our database table to be used for later purposes
-  async function getSteamUserIdBySteamId(steamId){
-      let id;
-      await db.SteamUser.findOne({
-          where: {
-              steamId: steamId
-          }
-      }).then((res)=> {
-          id = res.id;
-      })
-      return id;
+  async function getSteamUserIdBySteamId(steamId) {
+    let id;
+    await db.SteamUser.findOne({
+      where: {
+        steamId: steamId,
+      },
+    }).then((res) => {
+      id = res.id;
+    });
+    return id;
   }
+
+  app.get("/api/games", (req, res) => {
+    // getGamesList(apiKey, steamID);
+    const ownedGamesUrl = `http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${apiKey}&steamid=${steamID}&format=json&include_appinfo=true`;
+
+    axios
+      .get(ownedGamesUrl)
+      .then(async (response) => {
+        let singleGame = {};
+        //stores the database id for the user who's games are being found. Is used later to create join table rows(what games they own)
+        let currentUserSteamId = await getSteamUserIdBySteamId(steamID);
+        for (let i = 0; i < response.data.response.games.length; i++) {
+          const gameFromDatabase = await db.Game.findOne({
+            where: {
+              appId: response.data.response.games[i].appid,
+            },
+          });
+          if (gameFromDatabase === null) {
+            // TODO: Make an API call,
+            // wait for the call to complete,
+            //  then update the db.Game.create to include that additional data
+            singleGame = await db.Game.create({
+              name: response.data.response.games[i].name,
+              appId: response.data.response.games[i].appid,
+            });
+          } else {
+            singleGame = gameFromDatabase;
+          }
+          //function that creates the row connecting the user to the games they own in the join table(SteamUserGames)
+          await createJoinRow(currentUserSteamId, singleGame.id);
+        }
+        await res.json({
+          success: true,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
 
   // old code that Jonathan's code supercedes:
   // function getGamesList(apiKey, steamID) {
@@ -129,9 +128,7 @@ module.exports = function (app) {
   //   }
   // });
   //}
-
 };
-
 
 // game.js model:
 // module.exports = function (sequelize, DataTypes) {
@@ -161,7 +158,6 @@ module.exports = function (app) {
 // //     "mac": false,
 // //     "linux": true
 // //     },
-
 
 // steamUserGames.js model:
 // module.exports = function (sequelize, DataTypes) {
