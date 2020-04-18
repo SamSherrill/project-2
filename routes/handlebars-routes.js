@@ -58,7 +58,10 @@ module.exports = function (app) {
         personaName: req.params.personaName,
       },
     }).then((user) => {
-      console.log("User in the app.get(/api.steamUsers/:personaName function .then", user);
+      console.log(
+        "User in the app.get(/api.steamUsers/:personaName function .then",
+        user
+      );
       console.log("User object from database: ", user);
       res.json(user);
     });
@@ -79,7 +82,7 @@ module.exports = function (app) {
       include: [db.Game],
     })
       .then((user) => {
-        user = [{user: user.dataValues}];
+        user = [{ user: user.dataValues }];
         // check our DB for the user. IF they exist their with their games list,
         // then we display those in the browser with res.render("SteamUser");
         res.render("index", {
@@ -97,7 +100,6 @@ module.exports = function (app) {
       });
   });
 
-
   // app.get("/SteamUser/:twoUsers", function (req, res) {
   // SteamUser/sammysticks&dabigcheezey
   function getTwoUsers(userOne, userTwo, cb) {
@@ -110,18 +112,18 @@ module.exports = function (app) {
       include: [db.Game],
     }).then((res) => {
       const userOneObject = {
-        user: res.dataValues
+        user: res.dataValues,
       };
       userArray.push(userOneObject);
     });
-    (db.SteamUser.findOne({
+    db.SteamUser.findOne({
       where: {
-        personaName: userTwo
+        personaName: userTwo,
       },
-      include: [db.Game]
-    })).then((res) => {
+      include: [db.Game],
+    }).then((res) => {
       const userTwoObject = {
-        user: res.dataValues
+        user: res.dataValues,
       };
       userArray.push(userTwoObject);
       cb(userArray);
@@ -137,9 +139,30 @@ module.exports = function (app) {
 
     getTwoUsers(userOne, userTwo, (response) => {
       const userObj = response;
-      console.log("This is the userObj: ", userObj);
-      res.render("index", {
-        user: userObj
+      const userOneArray = [];
+      const userTwoArray = [];
+      const sharedGamesArray = [];
+      for (var i = 0; i < userObj.length; i++) {
+        let gamesArray = userObj[i].user.Games;
+        for (var j = 0; j < gamesArray.length; j++) {
+          if (i === 0) {
+            userOneArray.push(gamesArray[j].name);
+          } else {
+            userTwoArray.push(gamesArray[j].name);
+          }
+        }
+      }
+      for (var k = 0; k < userOneArray.length; k++) {
+        for (var l = 0; l < userTwoArray.length; l++) {
+          if (userTwoArray[l] === userOneArray[k]) {
+            sharedGamesArray.push({name: userTwoArray[j]});
+          }
+        }
+      }
+      // console.log("This is the userObj: ", userObj);
+      res.render("SteamUser", {
+        user: userObj,
+        sharedGames: sharedGamesArray
       });
     });
 
@@ -164,7 +187,6 @@ module.exports = function (app) {
     //   // data passed to handlebars files comes through the html-routes file
   });
 };
-
 
 // USER.JS CODE:
 
@@ -194,7 +216,6 @@ module.exports = function (app) {
 
 // To pull the data we need to display, we will almost certainly use the following code:
 // ****** END PSEUDO CODE
-
 
 // router.get("/users", function (req, res) {
 //   db.User.findAll()

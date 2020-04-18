@@ -1,4 +1,3 @@
-{{!-- This page is broken. A console error mentions a MIME problem. --}}
 <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
         <a class="navbar-item" href="https://bulma.io">
@@ -27,119 +26,31 @@
         <div class="column">
             <div class="field">
                 <div class="control">
-                    <input class="input is-primary input-left" type="text" placeholder="Your Steam Username">
+                    <input class="input is-primary input-left" id="user-one" type="text"
+                        placeholder="Your Steam Username">
                 </div>
             </div>
         </div>
         <div class="column">
             <div class="field">
                 <div class="control">
-                    <input class="input is-primary input-right" type="text" placeholder="Another Steam Username">
+                    <input class="input is-primary input-right" id="user-two" type="text"
+                        placeholder="Another Steam Username">
                 </div>
             </div>
         </div>
     </div>
     <div>
         <a>
-            <input class="button" type="submit" value="Submit input">
+            <input class="button username-submit" type="submit" value="Submit input">
         </a>
     </div>
 </div>
 
 <div class="container tables-container">
-    <div class="columns">
-        <div class="column is-one-third user-one-column">
-            <table class="table is-striped">
-                <thead>
-                    <tr>
-                        User
-                    </tr>
-                </thead>
-                <tbody>
-                    <ul>
-                        <li>Stellaris</li>
-                        <li>Chrono Trigger</li>
-                        <li>DOTA 2</li>
-                        <li>RimWorld</li>
-                        <li>Civilization 5</li>
-                        <li>Civilization 6</li>
-                        <li>Mount and Blade: Bannerlord</li>
-                        <li>Rise to Ruins</li>
-                        <li>CS:GO</li>
-                        <li>Path of Exile</li>
-                    </ul>
-                </tbody>
-            </table>
-        </div>
-        <div class="column is-one-third user-two-column">
-            <table class="table is-striped">
-                <thead>
-                    <tr>
-                        User 2 Games
-                    </tr>
-                </thead>
-                <tbody>
-                    <ul>
-                        <li>Team Fortress 2</li>
-                        <li>Stellaris</li>
-                        <li>DOTA 2</li>
-                        <li>Portal 2</li>
-                        <li>Guns of Icarus</li>
-                        <li>Civilization 6</li>
-                        <li>Mount and Blade: Bannerlord</li>
-                        <li>Goat Simulator</li>
-                        <li>CS:GO</li>
-                        <li>Path of Exile</li>
-                    </ul>
-                </tbody>
-            </table>
-        </div>
-        <div class="column is-one-third shared-games-column">
-            <table class="table is-striped">
-                <thead>
-                    <tr>
-                        <th>Shared Games</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Team Fortress 2*</td>
-                    </tr>
-                    <tr>
-                        <td>Stellaris</td>
-                    </tr>
-                    <tr>
-                        <td>DOTA 2</td>
-                    </tr>
-                    <tr>
-                        <td>Civilization 6</td>
-                    </tr>
-                    <tr>
-                        <td>Mount and Blade: Bannerlord</td>
-                    </tr>
-                    <tr>
-                        <td>CS:GO</td>
-                    </tr>
-                    <tr>
-                        <td>Path of Exile</td>
-                    </tr>
-                    {{!-- <ul>
-                        <li>Team Fortress 2*</li>
-                        <li>Stellaris</li>
-                        <li>DOTA 2</li>
-                        <li>Civilization 6</li>
-                        <li>Mount and Blade: Bannerlord</li>
-                        <li>CS:GO</li>
-                        <li>Path of Exile</li>
-                    </ul> --}}
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td>* = Games that are free to play; you can download these now to play with your friend!</td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
+    <div class = "columns">
+        {{> userone-block}}
+        {{> game-block}}
     </div>
 </div>
 
