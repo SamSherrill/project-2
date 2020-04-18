@@ -46,7 +46,6 @@ module.exports = function (app) {
           // wait for the call to complete,
           //  then update the db.Game.create to include that additional data
           singleGame = await db.Game.create({
-            steamid: this.steamID,
             name: response.data.response.games[i].name,
             appId: response.data.response.games[i].appid
           });
