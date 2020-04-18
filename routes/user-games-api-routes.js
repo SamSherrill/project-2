@@ -35,6 +35,8 @@ module.exports = function (app) {
 
     axios.get(ownedGamesUrl).then(async (response) => {
       let singleGame = {};
+      //stores the database id for the user who's games are being found. Is used later to create join table rows(what games they own)
+      let currentUserSteamId = await getSteamUserIdBySteamId(steamID);
       for (let i = 0; i < response.data.response.games.length; i++) {
         const gameFromDatabase = await db.Game.findOne({
           where: {
@@ -52,7 +54,8 @@ module.exports = function (app) {
         } else {
           singleGame = gameFromDatabase;
         }
-        await console.log(singleGame);
+        //function that creates the row connecting the user to the games they own in the join table(SteamUserGames)
+        await createJoinRow(currentUserSteamId, singleGame.id);
 
       }
       await res.json({
@@ -62,6 +65,31 @@ module.exports = function (app) {
       console.log(err);
     });
   }));
+
+  //function that creates the row connecting the user to the games they own in the join table(SteamUserGames)
+  async function createJoinRow(steamUserId, gameId){
+    db.SteamUserGames
+      .create({
+        steamUserId,
+        gameId
+      })
+      .then(() => console.log("success"))
+      //console logs error type if there was ant attempt to put in duplicate value
+      .catch(err=>console.log(err.original.code));
+  }
+
+  //Just helps in getting the id from our database table to be used for later purposes
+  async function getSteamUserIdBySteamId(steamId){
+      let id;
+      await db.SteamUser.findOne({
+          where: {
+              steamId: steamId
+          }
+      }).then((res)=> {
+          id = res.id;
+      })
+      return id;
+  }
 
   // old code that Jonathan's code supercedes:
   // function getGamesList(apiKey, steamID) {
