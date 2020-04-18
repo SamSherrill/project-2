@@ -30,6 +30,7 @@ module.exports = function (app) {
             // console.log("Game ID: ", res.data.response.games[i]);
             const gameInfoUrl = `https://store.steampowered.com/api/appdetails?appids=${gameId}`;
             axios.get(gameInfoUrl).then(gameInfoRes => {
+              console.log(gameInfoRes);
               //check if multiplayer
               //appid.data.categories
 
@@ -37,8 +38,9 @@ module.exports = function (app) {
               //   var appId = gameInforRes.data[i];
               //   console.log(appId);
               // }
-              // if(gameInfoRes.data)        
+              // if(gameInfoRes.data);
               const banana = `gameInfoRes.data.${gameId}.data.categories[0]`;
+              console.log(banana);
               //https://store.steampowered.com/api/appdetails?appids=440
             });
           } else {

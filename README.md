@@ -29,26 +29,13 @@ npm install
 
 ## Usage
 
-Option 1) Go to the provided <a href="https://steam-comparison.herokuapp.com/">link</a> to experience the website or,
+Go to the provided <a href="https://steam-comparison.herokuapp.com/">link</a> to experience the website.
 
-Option 2) download and install MySQL Server and MySQL Workbench and build your own database to use wth the application. 
-
-If use want to run the app on your own machine, first clone the repository to your system, then follow the above installation step(s), then setup your database for use with the application by copying the `schema.sql` file from the `db` folder and pasting the contents into the MySql Workbench query pane and running the script with the 'lightning bolt' icon. Then copy the contents from the `seeds.sql` file and running those scripts in the workbench query pane.
-
-Ensure that your MySQL root password is set in the `connection.js` file housed in `config` folder.
-
-Run the application in the command line with:
-
-```sh
-node server.js
-```
-
-Note: if the above command throws an error, make sure the file is first being targeted by running the command within the root of the project folder.
 
 
 The following demonstrates general application functionality:
 
-![steam-comparison demo](./public/assets/img/eat-da-burger-demo.gif)
+![steam-comparison demo](./public/images/project_02_steam-comparison.png)
 
 ## Contributors
 
