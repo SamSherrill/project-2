@@ -2,7 +2,7 @@ const db = require("../models");
 
 module.exports = function (app) {
   const axios = require("axios");
-  const apiKey = process.env.API_KEY || "58B845E0858DDB3A73B47D71B787198A";
+  const apiKey = process.env.API_KEY;
 
   function getUserInfo(apiKey, user, cb) {
     const queryVanityUrl = `http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${apiKey}&vanityurl=${user}`;
@@ -72,11 +72,9 @@ module.exports = function (app) {
 
   app.get("/SteamUser/:username", function (req, res) {
     const user = req.params.username;
-    // const user = "dabigcheezey";
     // use sequelize to find the user in our DB
     db.SteamUser.findOne({
       where: {
-        // BUT this is almost for sure not ID
         personaName: user,
       },
       include: [db.Game],
@@ -133,9 +131,6 @@ module.exports = function (app) {
   app.get("/SteamUsers/:usernameOne/:usernameTwo", function (req, res) {
     const userOne = req.params.usernameOne;
     const userTwo = req.params.usernameTwo;
-    // const user = "dabigcheezey";
-    //console.log("user in when 1st defined: ", user);
-    // use sequelize to find the user in our DB
 
     getTwoUsers(userOne, userTwo, (response) => {
       const userObj = response;

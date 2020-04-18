@@ -1,13 +1,16 @@
 //get user info
-//http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=F83481CE586D90CD0924F6576AA13DEC&steamids=76561198071626037
+//http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${apiKey}&steamids=76561198071626037
 
-//get user id by steam name
-//"http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=58B845E0858DDB3A73B47D71B787198A&vanityurl=sammysticks"
+//get user id by vanity URL
+// NOTE: The vanity URL is not always identical to their steam username.
+// It is the end of the URL that takes us to their profile
+// EX: https://steamcommunity.com/id/sammysticks <--- its the text after the last slash
+//"http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${apiKey}&vanityurl=sammysticks"
 
 var db = require("../models");
 module.exports = function (app) {
   const axios = require("axios");
-  const apiKey = process.env.API_KEY || "58B845E0858DDB3A73B47D71B787198A";
+  const apiKey = process.env.API_KEY;
 
   function getUserInfo(apiKey, user, cb) {
     const queryVanityUrl = `http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${apiKey}&vanityurl=${user}`;
