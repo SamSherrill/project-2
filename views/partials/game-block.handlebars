@@ -1,39 +1,18 @@
-{{!-- This is the shared games column. --}}
-
-<div class="column is-one-third shared-games-column">
-    <table class="table is-striped">
+<div class = "columns">
+<div class="column is-one-third user-one-column">
+    <table class="table">
         <thead>
             <tr>
-                <th>Shared Games</th>
+                <th id = "username">Shared Games</th>
             </tr>
         </thead>
         <tbody>
+            {{#each sharedGames}}
             <tr>
-                <td>Goat Simulator</td>
+                <td>{{name}}</td>
             </tr>
-            <tr>
-                <td>Stellaris</td>
-            </tr>
-            <tr>
-                <td>DOTA 2</td>
-            </tr>
-            <tr>
-                <td>Civilization 6</td>
-            </tr>
-            <tr>
-                <td>Mount and Blade: Bannerlord</td>
-            </tr>
-            <tr>
-                <td>CS:GO</td>
-            </tr>
-            <tr>
-                <td>Path of Exile</td>
-            </tr>
+            {{/each}}
         </tbody>
-        <tfoot>
-            <tr>
-                <td>* = Games that are free to play; you can download these now to play with your friend!</td>
-            </tr>
-        </tfoot>
     </table>
+</div>    
 </div>

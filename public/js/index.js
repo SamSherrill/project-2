@@ -23,7 +23,7 @@ $(document).ready(function () {
           userTwo: userTwo,
         }).done((res) => {
           console.log(res);
-          // window.location.href = "/SteamUsers/" + userOne + "/" + userTwo;
+          window.location.href = "/SteamUsers/" + userOne + "/" + userTwo;
         })
       );
     } else if (userOne) {
@@ -34,7 +34,7 @@ $(document).ready(function () {
           userOne: userOne,
         }).done((response) => {
           console.log(response);
-          // window.location.href = "/SteamUser/" + userOne;
+          window.location.href = "/SteamUser/" + userOne;
         })
       );
     }
