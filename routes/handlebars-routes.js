@@ -85,7 +85,7 @@ module.exports = function (app) {
         user = [{ user: user.dataValues }];
         // check our DB for the user. IF they exist their with their games list,
         // then we display those in the browser with res.render("SteamUser");
-        res.render("SteamUser", {
+        res.render("index", {
           user: user,
         });
       })
@@ -152,9 +152,9 @@ module.exports = function (app) {
           }
         }
       }
-      for (var i = 0; i < userOneArray.length; i++) {
-        for (var j = 0; j < userTwoArray.length; j++) {
-          if (userTwoArray[j] === userOneArray[i]) {
+      for (var k = 0; k < userOneArray.length; k++) {
+        for (var l = 0; l < userTwoArray.length; l++) {
+          if (userTwoArray[l] === userOneArray[k]) {
             sharedGamesArray.push({name: userTwoArray[j]});
           }
         }
