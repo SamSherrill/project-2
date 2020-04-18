@@ -155,7 +155,7 @@ module.exports = function (app) {
       for (var k = 0; k < userOneArray.length; k++) {
         for (var l = 0; l < userTwoArray.length; l++) {
           if (userTwoArray[l] === userOneArray[k]) {
-            sharedGamesArray.push({name: userTwoArray[j]});
+            sharedGamesArray.push({name: userTwoArray[l]});
           }
         }
       }
