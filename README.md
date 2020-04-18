@@ -31,6 +31,7 @@ npm install
 
 Go to the provided <a href="https://steam-comparison.herokuapp.com/">link</a> to experience the website.
 
+On the main page you may enter in the seatch box your Steam 
 
 
 The following demonstrates general application functionality:

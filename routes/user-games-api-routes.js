@@ -7,53 +7,75 @@
 
 var db = require("../models");
 module.exports = function (app) {
-  const axios = require("axios");
-  const apiKey = process.env.API_KEY;
+    const axios = require("axios");
+    const apiKey = process.env.API_KEY;
 
-  const steamID = "76561198035672130";
-  // that steamID is hard coded for sammysticks' Steam ID #. ID numbers are required to hit the API.
+    const steamID = "76561198035672130";
+    // that steamID is hard coded for sammysticks' Steam ID #. ID numbers are required to hit the API.
 
-  function getGamesList(apiKey, steamID) {
-    const ownedGamesUrl = `http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${apiKey}&steamid=${steamID}&format=json&include_appinfo=true`;
+    // function getGamesList(apiKey, steamID) {
+    //const ownedGamesUrl = `http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${apiKey}&steamid=${steamID}&format=json&include_appinfo=true`;
 
-    axios.get(ownedGamesUrl).then((res) => {
-      for (var i = 0; i < res.data.response.games.length; i++) {
-        //check if in database
-        const gameId = res.data.response.games[i].appid;
-        db.Game.findOne({
-          where: {
-            name: res.data.response.games[i].name,
-          },
-        }).then((gameRes) => {
-          if (!gameRes) {
-            //axios call game info
-            // console.log("Game ID: ", res.data.response.games[i]);
-            const gameInfoUrl = `https://store.steampowered.com/api/appdetails?appids=${gameId}`;
-            axios.get(gameInfoUrl).then(gameInfoRes => {
-              console.log(gameInfoRes);
-              //check if multiplayer
-              //appid.data.categories
+    //axios.get(ownedGamesUrl).then((res) => {
+    //   for (var i = 0; i < res.data.response.games.length; i++) {
+    //     //check if in database
+    //     const gameId = res.data.response.games[i].appid;
+    //     db.Game.findOne({
+    //       where: {
+    //         name: res.data.response.games[i].name,
+    //       },
+    //     }).then((gameRes) => {
+    //       if (!gameRes) {
+    //         //axios call game info
+    //         // console.log("Game ID: ", res.data.response.games[i]);
+    //         const gameInfoUrl = `https://store.steampowered.com/api/appdetails?appids=${gameId}`;
+    //         axios.get(gameInfoUrl).then(gameInfoRes => {
+    //           console.log(gameInfoRes);
+    //           //check if multiplayer
+    //           //appid.data.categories
 
-              // for(var i = 0; i < gameInfoRes.data.length; i++){
-              //   var appId = gameInforRes.data[i];
-              //   console.log(appId);
-              // }
-              // if(gameInfoRes.data);
-              const banana = `gameInfoRes.data.${gameId}.data.categories[0]`;
-              console.log(banana);
-              //https://store.steampowered.com/api/appdetails?appids=440
+    //           // for(var i = 0; i < gameInfoRes.data.length; i++){
+    //           //   var appId = gameInforRes.data[i];
+    //           //   console.log(appId);
+    //           // }
+    //           // if(gameInfoRes.data);
+    //           const banana = `gameInfoRes.data.${gameId}.data.categories[0]`;
+    //           console.log(banana);
+    //           //https://store.steampowered.com/api/appdetails?appids=440
+    //         });
+    //       } else {
+    //         console.log("Game exists");
+    //       }
+    //     });
+    //   }
+    // });
+    //}
+
+    app.get("/api/games", ((req, res) => {
+        // getGamesList(apiKey, steamID);
+        const ownedGamesUrl = `http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${apiKey}&steamid=${steamID}&format=json&include_appinfo=true`;
+
+        axios.get(ownedGamesUrl).then(async (response) => {
+            console.log(response.data.response.games);
+            // res.json(response.data.response.games);
+            for (let i = 0; i < response.data.response.games.length; i++) {
+
+                const newGame = await db.Game.create({
+                    name: response.data.response.games[i].name,
+                    appId: response.data.response.games[i].appid
+                });
+                await console.log(newGame);
+                await console.log("created a game. Mayabe?");
+            }
+            await console.log("=============");
+            await console.log("this should wait until the end");
+            await res.json({
+                success: true
             });
-          } else {
-            console.log("Game exists");
-          }
+        }).catch(err => {
+            console.log(err);
         });
-      }
-    });
-  }
-
-  app.get("/api/games", (() => {
-    getGamesList(apiKey, steamID);
-  }));
+    }));
 
 };
 
