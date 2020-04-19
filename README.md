@@ -30,6 +30,10 @@ The following demonstrates general application functionality:
 
 ![steam-comparison demo](./public/images/steam-comparison-demo.png)
 
+## Design
+
+![screenshot](./public/images/wireframe.png)
+
 ## Contributors
 
 <img src="https://avatars2.githubusercontent.com/u/38333695?v=4" alt="avatar" width="75px" height="75px" />
