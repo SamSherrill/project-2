@@ -27,6 +27,12 @@ $(document).ready(function () {
           window.location.href = "/SteamUsers/" + userOne + "/" + userTwo;
         })
       );
+      $.post("/api/games", {
+        user: userOne,
+      });
+      $.post("/api/games", {
+        user: userTwo,
+      });
     } else if (userOne) {
       $.post("/api/steamUsers", {
         user: userOne,
@@ -38,9 +44,9 @@ $(document).ready(function () {
           window.location.href = "/SteamUser/" + userOne;
         })
       );
-      $.post("/api/games",{
-        user: userOne 
-      })
+      $.post("/api/games", {
+        user: userOne,
+      });
     }
     //The following block of user code is done in the user-api-routes.js
     // We need to save the usernames
