@@ -51,8 +51,15 @@ module.exports = function (app) {
     return id;
   }
 
-  app.get("/api/games", (req, res) => {
-    // getGamesList(apiKey, steamID);
+  app.post("/api/games", (req, res) => {
+    console.log("req body: ",req.body);
+    db.SteamUser.findOne({
+      where: {
+        vanityUrl: req.body.user
+      }
+    }
+    ).then(resForSteamId=>{
+    const steamID = resForSteamId.steamId;
     const ownedGamesUrl = `http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${apiKey}&steamid=${steamID}&format=json&include_appinfo=true`;
 
     axios
@@ -88,6 +95,7 @@ module.exports = function (app) {
       .catch((err) => {
         console.log(err);
       });
+    });
   });
 
   // old code that Jonathan's code supercedes:
