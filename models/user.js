@@ -3,7 +3,8 @@ module.exports = function (sequelize, DataTypes) {
     personaName: DataTypes.STRING,
     steamId: DataTypes.STRING,
     profileUrl: DataTypes.STRING,
-    avatarUrl: DataTypes.STRING
+    avatarUrl: DataTypes.STRING,
+    vanityUrl: DataTypes.STRING
   });
 
   SteamUser.associate = function (models) {

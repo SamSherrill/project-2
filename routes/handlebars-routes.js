@@ -1,5 +1,8 @@
 const db = require("../models");
 
+//add vanity URL to user model
+//use it where needed
+
 module.exports = function (app) {
   const axios = require("axios");
   const apiKey = process.env.API_KEY;
@@ -11,12 +14,14 @@ module.exports = function (app) {
       let userId = res.data.response.steamid;
       const querySteamUserUrl = `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${apiKey}&steamids=${userId}`;
       axios.get(querySteamUserUrl).then(function (res) {
+        const vanityUrl = res.data.response.players[0].profileurl.split("/")[4];
         if (res.data.response.players.length > 0) {
           let steamUser = {
             personaName: res.data.response.players[0].personaname,
             steamId: res.data.response.players[0].steamid,
             profileUrl: res.data.response.players[0].profileurl,
             avatarUrl: res.data.response.players[0].avatarmedium,
+            vanityUrl: vanityUrl
           };
           return cb(steamUser);
         } else {
@@ -30,10 +35,9 @@ module.exports = function (app) {
   app.post("/api/steamUsers", function (req, res) {
     db.SteamUser.findOne({
       where: {
-        personaName: req.body.user,
+        vanityUrl: req.body.user,
       },
     }).then((user) => {
-      console.log(user);
       if (!user) {
         getUserInfo(apiKey, req.body.user, (steamUser) => {
           db.SteamUser.create(steamUser).then(function (dbPost) {
@@ -75,7 +79,7 @@ module.exports = function (app) {
     // use sequelize to find the user in our DB
     db.SteamUser.findOne({
       where: {
-        personaName: user,
+        vanityUrl: user,
       },
       include: [db.Game],
     })
@@ -105,7 +109,7 @@ module.exports = function (app) {
     db.SteamUser.findOne({
       where: {
         // BUT this is almost for sure not ID
-        personaName: userOne,
+        vanityUrl: userOne,
       },
       include: [db.Game],
     }).then((res) => {
@@ -116,7 +120,7 @@ module.exports = function (app) {
     });
     db.SteamUser.findOne({
       where: {
-        personaName: userTwo,
+        vanityUrl: userTwo,
       },
       include: [db.Game],
     }).then((res) => {
@@ -182,71 +186,3 @@ module.exports = function (app) {
     //   // data passed to handlebars files comes through the html-routes file
   });
 };
-
-// USER.JS CODE:
-
-// module.exports = function (sequelize, DataTypes) {
-//   const SteamUser = sequelize.define("SteamUser", {
-//     personaName: DataTypes.STRING,
-//     steamId: DataTypes.STRING,
-//     profileUrl: DataTypes.STRING,
-//     avatarUrl: DataTypes.STRING
-//   });
-
-//   SteamUser.associate = function (models) {
-//     SteamUser.belongsToMany(models.Game, {
-//       through: "SteamUserGames",
-//       foreignKey: "steamUserId",
-//     });
-//   };
-//   return SteamUser;
-// };
-
-// ****** PSEUDO CODE HERE:
-
-// What do we need to do in this folder? Let's pseudo code that.
-
-// This file will reference our models. We will need to require them.
-// Also, we'll need to require expres & setup a router.
-
-// To pull the data we need to display, we will almost certainly use the following code:
-// ****** END PSEUDO CODE
-
-// router.get("/users", function (req, res) {
-//   db.User.findAll()
-//     .then((users) => {
-//       console.log(users);
-//       res.render("all-users", { users });
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//       res.status(500);
-//       res.json({
-//         error: true,
-//       });
-//     });
-// });
-
-// router.get("/users/:id", function (req, res) {
-//   db.User.findOne({
-//     where: {
-//       id: req.params.id,
-//     },
-//     include: [
-//       {
-//         model: db.Lego,
-//       },
-//     ],
-//   })
-//     .then((user) => {
-//       console.log(user.Legos);
-//       res.render("single-user", { user, legos: user.Legos });
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//       res.status(500);
-//       res.json({
-//         error: true,
-//       });
-//     });
-// });
