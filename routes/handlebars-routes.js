@@ -25,8 +25,9 @@ module.exports = function (app) {
           };
           return cb(steamUser);
         } else {
-          return console.log("Couldn't find user!");
-          // redirect to a 404 page user not found
+          console.log("Couldn't find user!");
+          res.status(500);
+          res.end();
         }
       });
     });
