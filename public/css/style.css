@@ -1,11 +1,10 @@
 html, body {
-  min-height: 100%;
+  height: 100%;
 }
 body {
   min-height: 100%;
   background-color: #1c3c51;
   width: 100%;
-  margin-bottom: 60px;
 }
 table {
     width: 100%;
