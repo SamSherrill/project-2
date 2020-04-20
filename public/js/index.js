@@ -18,11 +18,11 @@ $(document).ready(function () {
       $.post("/api/steamUsers", {
         user: userOne,
         user: userTwo,
-      }).then(
+      }).done(
         $.get("/SteamUsers/" + userOne + "/" + userTwo, {
           userOne: userOne,
           userTwo: userTwo,
-        }).done((res) => {
+        }).done(() => {
           $.post("/api/games", {
             user: userOne,
           }).done(()=>{
@@ -32,10 +32,11 @@ $(document).ready(function () {
           });
         })
       );
+      /////////////////////////////////////////
     } else if (userOne) {
       $.post("/api/steamUsers", {
         user: userOne,
-      }).then(
+      }).done(
         $.get("/SteamUser/" + userOne, {
           userOne: userOne,
         }).done(() => {

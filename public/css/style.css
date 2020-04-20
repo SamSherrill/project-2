@@ -4,7 +4,8 @@ html, body {
 body {
   min-height: 100%;
   background-color: #1c3c51;
-  /* margin-bottom: 60px; */
+  width: 100%;
+  margin-bottom: 60px;
 }
 table {
     width: 100%;
