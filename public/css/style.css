@@ -1,5 +1,5 @@
 html, body {
-  height: 100%;
+  min-height: 100%;
 }
 body {
   min-height: 100%;
@@ -53,4 +53,8 @@ td{
 
 .website-title {
   color: lightgrey;
+}
+
+a.navbar-item:hover{
+  background-color: #171a21;
 }
