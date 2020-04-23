@@ -1,4 +1,5 @@
 const express = require("express");
+const compression = require("compression");
 require("dotenv").config();
 
 const PORT = process.env.PORT || 3000;
@@ -15,6 +16,7 @@ app.use(express.urlencoded({
   extended: true
 }));
 app.use(express.json());
+app.use(compression());
 
 // Set Handlebars.
 var exphbs = require("express-handlebars");
