@@ -85,6 +85,7 @@ module.exports = function (app) {
       res.json(user);
     });
   });
+  
   app.get("/", function (req, res) {
     res.render("index");
   });

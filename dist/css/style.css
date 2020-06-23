@@ -65,3 +65,7 @@ a.navbar-item:hover{
 .error-message{
   color: white;
 }
+
+button{
+  margin-bottom: 1rem;
+}

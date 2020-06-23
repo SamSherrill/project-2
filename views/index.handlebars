@@ -26,21 +26,24 @@
     <p class="error-message">{{error.message}}</p>
     <div class="columns">
         <div class="column">
-            <div class="field">
+            <div class="field" id="primary-user-input">
                 <div class="control">
                     <input class="input is-primary input-left" id="user-one" type="text"
                         placeholder="Your Steam Vanity URL">
                 </div>
             </div>
-        </div>
-        <div class="column">
             <div class="field">
                 <div class="control">
-                    <input class="input is-primary input-right" id="user-two" type="text"
+                    <input class="input is-primary input-left" id="user-two" type="text"
                         placeholder="Another Steam Vanity URL">
                 </div>
             </div>
         </div>
+    </div>
+    <div>
+        <a>
+            <button class="button" id="add-user">Add User</button>
+        </a>
     </div>
     <div>
         <a>

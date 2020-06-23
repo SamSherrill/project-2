@@ -1,6 +1,12 @@
 $(document).ready(function () {
   console.log("ready!");
 
+  const addUser = () => {
+    $("#primary-user-input").after('<div class="field"><div class="control"><input class="input is-primary input-left" id="user-two" type="text" placeholder="Another Steam Vanity URL"></div></div>')
+  }
+
+  $('#add-user').on("click", addUser);
+
   $(".username-submit").on("click", function (event) {
     event.preventDefault();
     if ($("#user-one").val().trim().length > 0) {
