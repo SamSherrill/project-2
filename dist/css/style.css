@@ -56,3 +56,12 @@ td{
 a.navbar-item:hover{
   background-color: #171a21;
 }
+
+.error-type{
+  color: red;
+  font-size: 120%;
+}
+
+.error-message{
+  color: white;
+}

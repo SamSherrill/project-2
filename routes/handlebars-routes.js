@@ -10,27 +10,41 @@ module.exports = function (app) {
   function getUserInfo(apiKey, user, cb) {
     const queryVanityUrl = `http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${apiKey}&vanityurl=${user}`;
 
-    axios.get(queryVanityUrl).then(function (res) {
-      let userId = res.data.response.steamid;
-      const querySteamUserUrl = `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${apiKey}&steamids=${userId}`;
-      axios.get(querySteamUserUrl).then(function (res) {
-        const vanityUrl = res.data.response.players[0].profileurl.split("/")[4];
-        if (res.data.response.players.length > 0) {
-          let steamUser = {
-            personaName: res.data.response.players[0].personaname,
-            steamId: res.data.response.players[0].steamid,
-            profileUrl: res.data.response.players[0].profileurl,
-            avatarUrl: res.data.response.players[0].avatarmedium,
-            vanityUrl: vanityUrl
-          };
-          return cb(steamUser);
-        } else {
-          console.log("Couldn't find user!");
-          res.status(500);
-          res.end();
-        }
+    axios
+      .get(queryVanityUrl)
+      .then(function (res) {
+        let userId = res.data.response.steamid;
+        const querySteamUserUrl = `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${apiKey}&steamids=${userId}`;
+        axios
+          .get(querySteamUserUrl)
+          .then(function (res) {
+            const vanityUrl = res.data.response.players[0].profileurl.split(
+              "/"
+            )[4];
+            if (res.data.response.players.length > 0) {
+              let steamUser = {
+                personaName: res.data.response.players[0].personaname,
+                steamId: res.data.response.players[0].steamid,
+                profileUrl: res.data.response.players[0].profileurl,
+                avatarUrl: res.data.response.players[0].avatarmedium,
+                vanityUrl: vanityUrl,
+              };
+              return cb(steamUser);
+            } else {
+              console.log("Couldn't find user!");
+              res.status(500);
+              res.end();
+            }
+          })
+          .catch((er) => {
+            console.log("Could not load user information");
+            res.send("error");
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.send("error");
       });
-    });
   }
 
   app.post("/api/steamUsers", function (req, res) {
@@ -94,22 +108,20 @@ module.exports = function (app) {
       })
       .catch((err) => {
         console.log(err);
-        // If they aren't in our DB, then we use a .catch()
-        // that will need to use user-api-routes.js &
-        // user-games-api-routes.js to do the necessary calls to Steam's API
-
-        // pass in data
-        // data passed to handlebars files comes through the html-routes file
+        res.render("index", {
+          error: {
+            type: "Could not load user.",
+            message:
+              "Make sure you use the vanity URL. Also make sure all users have there profile's game library set to public in privacy settings.",
+          },
+        });
       });
   });
 
-  // app.get("/SteamUser/:twoUsers", function (req, res) {
-  // SteamUser/sammysticks&dabigcheezey
-  function getTwoUsers(userOne, userTwo, cb) {
+  function getTwoUsers(res, userOne, userTwo, cb) {
     const userArray = [];
     db.SteamUser.findOne({
       where: {
-        // BUT this is almost for sure not ID
         vanityUrl: userOne,
       },
       include: [db.Game],
@@ -124,20 +136,29 @@ module.exports = function (app) {
         vanityUrl: userTwo,
       },
       include: [db.Game],
-    }).then((res) => {
-      const userTwoObject = {
-        user: res.dataValues,
-      };
-      userArray.push(userTwoObject);
-      cb(userArray);
-    });
+    })
+      .then((res) => {
+        const userTwoObject = {
+          user: res.dataValues,
+        };
+        userArray.push(userTwoObject);
+        cb(userArray);
+      })
+      .catch((er) => {
+        console.log(er);
+        res.render("index", { error: {
+          type:"Could not load user." ,
+          message:"Make sure you use the vanity URL. Also make sure all users have there profile's game library set to public in privacy settings."
+        }
+      })
+      });
   }
 
   app.get("/SteamUsers/:usernameOne/:usernameTwo", function (req, res) {
     const userOne = req.params.usernameOne;
     const userTwo = req.params.usernameTwo;
 
-    getTwoUsers(userOne, userTwo, (response) => {
+    getTwoUsers(res, userOne, userTwo, (response) => {
       const userObj = response;
       const userOneArray = [];
       const userTwoArray = [];
@@ -155,35 +176,14 @@ module.exports = function (app) {
       for (var k = 0; k < userOneArray.length; k++) {
         for (var l = 0; l < userTwoArray.length; l++) {
           if (userTwoArray[l] === userOneArray[k]) {
-            sharedGamesArray.push({name: userTwoArray[l]});
+            sharedGamesArray.push({ name: userTwoArray[l] });
           }
         }
       }
-      // console.log("This is the userObj: ", userObj);
       res.render("SteamUser", {
         user: userObj,
-        sharedGames: sharedGamesArray
+        sharedGames: sharedGamesArray,
       });
     });
-
-    // check our DB for the user. IF they exist their with their games list,
-    // then we display those in the browser with res.render("SteamUser");
-    // console.log("user in .then: ", user);
-    //   res.render("index", {
-    //     userOne,
-    //     userTwo,
-    //     gamesOne: userOne.Games,
-    //     //gamesTwo: userTwo.Games,
-    //   });
-    //   //{ user, legos: user.Legos }
-    // })
-    // .catch((err) => {
-    //   console.log(err);
-    //   // If they aren't in our DB, then we use a .catch()
-    //   // that will need to use user-api-routes.js &
-    //   // user-games-api-routes.js to do the necessary calls to Steam's API
-
-    //   // pass in data
-    //   // data passed to handlebars files comes through the html-routes file
   });
 };
