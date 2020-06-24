@@ -1,4 +1,5 @@
 const db = require("../models");
+const { response } = require("express");
 
 //add vanity URL to user model
 //use it where needed
@@ -47,22 +48,26 @@ module.exports = function (app) {
       });
   }
 
-  app.post("/api/steamUsers", function (req, res) {
-    db.SteamUser.findOne({
-      where: {
-        vanityUrl: req.body.user,
-      },
-    }).then((user) => {
-      if (!user) {
-        getUserInfo(apiKey, req.body.user, (steamUser) => {
-          db.SteamUser.create(steamUser).then(function (dbPost) {
-            res.json(dbPost);
+  app.post("/api/steamUsers", async function (req, res) {
+    const createdUsers = []
+    await req.body.usersArray.forEach((user) => {
+      db.SteamUser.findOne({
+        where: {
+          vanityUrl: user,
+        },
+      }).then((user) => {
+        if (!user) {
+          getUserInfo(apiKey, user, (steamUser) => {
+            db.SteamUser.create(steamUser).then(function (dbPost) {
+              createdUsers.push(dbPost);
+            });
           });
-        });
-      } else {
-        console.log("user already exists!");
-      }
+        } else {
+          console.log("user already exists!");
+        }
+      });
     });
+    await res.json(createdUsers);
   });
 
   app.get("/api/steamUsers", function (req, res) {
@@ -85,30 +90,57 @@ module.exports = function (app) {
       res.json(user);
     });
   });
-  
+
   app.get("/", function (req, res) {
     res.render("index");
   });
 
-  app.get("/SteamUser/:username", function (req, res) {
-    const user = req.params.username;
-    // use sequelize to find the user in our DB
-    db.SteamUser.findOne({
-      where: {
-        vanityUrl: user,
-      },
-      include: [db.Game],
-    })
-      .then((user) => {
-        user = [{ user: user.dataValues }];
-        // check our DB for the user. IF they exist their with their games list,
-        // then we display those in the browser with res.render("SteamUser");
-        res.render("index", {
-          user: user,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
+  // app.get("/SteamUser/:username", function (req, res) {
+  //   const user = req.params.username;
+  //   // use sequelize to find the user in our DB
+  //   db.SteamUser.findOne({
+  //     where: {
+  //       vanityUrl: user,
+  //     },
+  //     include: [db.Game],
+  //   })
+  //     .then((user) => {
+  //       user = [{ user: user.dataValues }];
+  //       // check our DB for the user. IF they exist their with their games list,
+  //       // then we display those in the browser with res.render("SteamUser");
+  //       res.render("index", {
+  //         user: user,
+  //       });
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       res.render("index", {
+  //         error: {
+  //           type: "Could not load user.",
+  //           message:
+  //             "Make sure you use the vanity URL. Also make sure all users have there profile's game library set to public in privacy settings.",
+  //         },
+  //       });
+  //     });
+  // });
+
+  async function getUsers (res, usersArray, cb) {
+    let retrievedUserArray = [];
+    for(let i = 0; i < usersArray.length; i++){
+      await db.SteamUser.findOne({
+        where: {
+          vanityUrl: usersArray[i],
+        },
+        include: [db.Game],
+      }).then(async (res) => {
+        if(res){
+          const userObject = {
+            user: res.dataValues,
+          };
+          await retrievedUserArray.push(userObject);
+        }
+      }).catch((er) => {
+        console.log(er);
         res.render("index", {
           error: {
             type: "Could not load user.",
@@ -117,72 +149,22 @@ module.exports = function (app) {
           },
         });
       });
-  });
-
-  function getTwoUsers(res, userOne, userTwo, cb) {
-    const userArray = [];
-    db.SteamUser.findOne({
-      where: {
-        vanityUrl: userOne,
-      },
-      include: [db.Game],
-    }).then((res) => {
-      const userOneObject = {
-        user: res.dataValues,
-      };
-      userArray.push(userOneObject);
-    });
-    db.SteamUser.findOne({
-      where: {
-        vanityUrl: userTwo,
-      },
-      include: [db.Game],
-    })
-      .then((res) => {
-        const userTwoObject = {
-          user: res.dataValues,
-        };
-        userArray.push(userTwoObject);
-        cb(userArray);
-      })
-      .catch((er) => {
-        console.log(er);
-        res.render("index", { error: {
-          type:"Could not load user." ,
-          message:"Make sure you use the vanity URL. Also make sure all users have there profile's game library set to public in privacy settings."
-        }
-      })
-      });
+    }
+    console.log("array right before being called back: ", retrievedUserArray);
+    await cb(retrievedUserArray);
   }
 
-  app.get("/SteamUsers/:usernameOne/:usernameTwo", function (req, res) {
-    const userOne = req.params.usernameOne;
-    const userTwo = req.params.usernameTwo;
-
-    getTwoUsers(res, userOne, userTwo, (response) => {
-      const userObj = response;
-      const userOneArray = [];
-      const userTwoArray = [];
-      const sharedGamesArray = [];
-      for (var i = 0; i < userObj.length; i++) {
-        let gamesArray = userObj[i].user.Games;
-        for (var j = 0; j < gamesArray.length; j++) {
-          if (i === 0) {
-            userOneArray.push(gamesArray[j].name);
-          } else {
-            userTwoArray.push(gamesArray[j].name);
-          }
-        }
+  app.post("/sharedGames", function (req, res) {
+    getUsers(res, req.body.usersArray, (usersArray) => {
+      console.log("What will hopefully one day not be an empty array: ", usersArray);
+      let sharedGamesArray = usersArray[0].user.Games.map(game => game.dataValues.name);
+      for (var i = 1; i < usersArray.length; i++) {
+        console.log(`iteration ${i}`, sharedGamesArray);
+        let gamesArray = usersArray[i].user.Games.map(game => game.dataValues.name);
+        sharedGamesArray = sharedGamesArray.filter(game=>gamesArray.includes(game));
       }
-      for (var k = 0; k < userOneArray.length; k++) {
-        for (var l = 0; l < userTwoArray.length; l++) {
-          if (userTwoArray[l] === userOneArray[k]) {
-            sharedGamesArray.push({ name: userTwoArray[l] });
-          }
-        }
-      }
+      console.log("final shared games: ", sharedGamesArray);
       res.render("SteamUser", {
-        user: userObj,
         sharedGames: sharedGamesArray,
       });
     });
