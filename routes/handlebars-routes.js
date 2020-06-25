@@ -10,10 +10,12 @@ module.exports = function (app) {
 
   function getUserInfo(apiKey, user, cb) {
     const queryVanityUrl = `http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${apiKey}&vanityurl=${user}`;
+    console.log(`=============${queryVanityUrl}===============`)
 
     axios
       .get(queryVanityUrl)
       .then(function (res) {
+        console.log(`============RETRIEVED ID: ${res.data.response.steamid}================`)
         let userId = res.data.response.steamid;
         const querySteamUserUrl = `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${apiKey}&steamids=${userId}`;
         axios
@@ -48,6 +50,10 @@ module.exports = function (app) {
       });
   }
 
+  app.get("/", function (req, res) {
+    res.render("index");
+  });
+
   app.post("/api/steamUsers", async function (req, res) {
     const createdUsers = [];
     await req.body.usersArray.forEach(async (user) => {
@@ -55,10 +61,10 @@ module.exports = function (app) {
         where: {
           vanityUrl: user,
         },
-      }).then((user) => {
-        if (!user) {
-          getUserInfo(apiKey, user, (steamUser) => {
-            db.SteamUser.create(steamUser).then(function (dbPost) {
+      }).then((dbUser) => {
+        if (!dbUser) {
+          getUserInfo(apiKey, user, async (steamUser) => {
+            await db.SteamUser.create(steamUser).then(function (dbPost) {
               createdUsers.push(dbPost);
             });
           });
@@ -89,10 +95,6 @@ module.exports = function (app) {
       console.log("User object from database: ", user);
       res.json(user);
     });
-  });
-
-  app.get("/", function (req, res) {
-    res.render("index");
   });
 
   // app.get("/SteamUser/:username", function (req, res) {
@@ -152,21 +154,15 @@ module.exports = function (app) {
           });
         });
     }
-    console.log("array right before being called back: ", retrievedUserArray);
     await cb(retrievedUserArray);
   }
 
   app.post("/sharedGames", function (req, res) {
     getUsers(res, req.body.usersArray, (usersArray) => {
-      console.log(
-        "What will hopefully one day not be an empty array: ",
-        usersArray
-      );
       let sharedGamesArray = usersArray[0].user.Games.map(
         (game) => game.dataValues.name
       );
       for (var i = 1; i < usersArray.length; i++) {
-        console.log(`iteration ${i}`, sharedGamesArray);
         let gamesArray = usersArray[i].user.Games.map(
           (game) => game.dataValues.name
         );
@@ -174,7 +170,6 @@ module.exports = function (app) {
           gamesArray.includes(game)
         );
       }
-      console.log("final shared games: ", sharedGamesArray);
       res.render("SteamUser", {
         user: usersArray,
         sharedGames: sharedGamesArray
