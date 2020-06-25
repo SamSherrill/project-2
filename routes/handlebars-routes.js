@@ -35,18 +35,14 @@ module.exports = function (app) {
               return cb(steamUser);
             } else {
               console.log("Couldn't find user!");
-              res.status(500);
-              res.end();
             }
           })
           .catch((er) => {
             console.log("Could not load user information");
-            res.send("error");
           });
       })
       .catch((err) => {
         console.log(err);
-        res.send("error");
       });
   }
 
@@ -143,18 +139,11 @@ module.exports = function (app) {
             const userObject = {
               user: res.dataValues,
             };
-            await retrievedUserArray.push(userObject);
+            retrievedUserArray.push(userObject);
           }
         })
         .catch((er) => {
           console.log(er);
-          res.render("index", {
-            error: {
-              type: "Could not load user.",
-              message:
-                "Make sure you use the vanity URL. Also make sure all users have there profile's game library set to public in privacy settings.",
-            },
-          });
         });
     }
     await cb(retrievedUserArray);
