@@ -49,9 +49,9 @@ module.exports = function (app) {
   }
 
   app.post("/api/steamUsers", async function (req, res) {
-    const createdUsers = []
-    await req.body.usersArray.forEach((user) => {
-      db.SteamUser.findOne({
+    const createdUsers = [];
+    await req.body.usersArray.forEach(async (user) => {
+      await db.SteamUser.findOne({
         where: {
           vanityUrl: user,
         },
@@ -67,7 +67,7 @@ module.exports = function (app) {
         }
       });
     });
-    await res.json(createdUsers);
+    return await res.json(createdUsers);
   });
 
   app.get("/api/steamUsers", function (req, res) {
@@ -124,31 +124,33 @@ module.exports = function (app) {
   //     });
   // });
 
-  async function getUsers (res, usersArray, cb) {
+  async function getUsers(res, usersArray, cb) {
     let retrievedUserArray = [];
-    for(let i = 0; i < usersArray.length; i++){
+    for (let i = 0; i < usersArray.length; i++) {
       await db.SteamUser.findOne({
         where: {
           vanityUrl: usersArray[i],
         },
         include: [db.Game],
-      }).then(async (res) => {
-        if(res){
-          const userObject = {
-            user: res.dataValues,
-          };
-          await retrievedUserArray.push(userObject);
-        }
-      }).catch((er) => {
-        console.log(er);
-        res.render("index", {
-          error: {
-            type: "Could not load user.",
-            message:
-              "Make sure you use the vanity URL. Also make sure all users have there profile's game library set to public in privacy settings.",
-          },
+      })
+        .then(async (res) => {
+          if (res) {
+            const userObject = {
+              user: res.dataValues,
+            };
+            await retrievedUserArray.push(userObject);
+          }
+        })
+        .catch((er) => {
+          console.log(er);
+          res.render("index", {
+            error: {
+              type: "Could not load user.",
+              message:
+                "Make sure you use the vanity URL. Also make sure all users have there profile's game library set to public in privacy settings.",
+            },
+          });
         });
-      });
     }
     console.log("array right before being called back: ", retrievedUserArray);
     await cb(retrievedUserArray);
@@ -156,16 +158,26 @@ module.exports = function (app) {
 
   app.post("/sharedGames", function (req, res) {
     getUsers(res, req.body.usersArray, (usersArray) => {
-      console.log("What will hopefully one day not be an empty array: ", usersArray);
-      let sharedGamesArray = usersArray[0].user.Games.map(game => game.dataValues.name);
+      console.log(
+        "What will hopefully one day not be an empty array: ",
+        usersArray
+      );
+      let sharedGamesArray = usersArray[0].user.Games.map(
+        (game) => game.dataValues.name
+      );
       for (var i = 1; i < usersArray.length; i++) {
         console.log(`iteration ${i}`, sharedGamesArray);
-        let gamesArray = usersArray[i].user.Games.map(game => game.dataValues.name);
-        sharedGamesArray = sharedGamesArray.filter(game=>gamesArray.includes(game));
+        let gamesArray = usersArray[i].user.Games.map(
+          (game) => game.dataValues.name
+        );
+        sharedGamesArray = sharedGamesArray.filter((game) =>
+          gamesArray.includes(game)
+        );
       }
       console.log("final shared games: ", sharedGamesArray);
       res.render("SteamUser", {
-        sharedGames: sharedGamesArray,
+        user: usersArray,
+        sharedGames: sharedGamesArray
       });
     });
   });

@@ -27,7 +27,7 @@ $(document).ready(function () {
         .then(()=>{
           $.post("/sharedGames", {
             usersArray
-          }).then(()=>console.log("is it WOOOOORKING??"))
+          }).done((res)=> $( "html" ).html( res ));
         }
             // .done(() => {
             //   $.post("/api/games", {
