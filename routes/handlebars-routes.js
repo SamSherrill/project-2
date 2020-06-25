@@ -55,6 +55,7 @@ module.exports = function (app) {
   });
 
   app.post("/api/steamUsers", async function (req, res) {
+    console.log('============running /api/steamUsers route===========');
     const createdUsers = [];
     await req.body.usersArray.forEach(async (user) => {
       await db.SteamUser.findOne({
@@ -63,17 +64,19 @@ module.exports = function (app) {
         },
       }).then((dbUser) => {
         if (!dbUser) {
-          getUserInfo(apiKey, user, async (steamUser) => {
-            await db.SteamUser.create(steamUser).then(function (dbPost) {
+          getUserInfo(apiKey, user, async (user) => {
+            await db.SteamUser.create(user).then(function (dbPost) {
               createdUsers.push(dbPost);
             });
           });
+          console.log(`************creating user ${user} at ${new Date().getTime()}`)
         } else {
           console.log("user already exists!");
         }
       });
+      console.log("/api/steamUsers iteration for: ", user);
     });
-    return await res.json(createdUsers);
+    return await res.json({time: `${new Date().getTime()} ***************`});
   });
 
   app.get("/api/steamUsers", function (req, res) {

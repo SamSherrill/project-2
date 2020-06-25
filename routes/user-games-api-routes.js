@@ -30,7 +30,9 @@ module.exports = function (app) {
   }
 
   app.post("/api/games", async (req, res) => {
+    console.log("========running /api/games route===========")
     for(let k = 0; k < req.body.usersArray.length; k++) {
+      console.log(`*************time stamp for iteration ${k}: ${new Date().getTime()}***************`);
       await db.SteamUser.findOne({
         where: {
           vanityUrl: req.body.usersArray[k],
@@ -65,16 +67,15 @@ module.exports = function (app) {
             })
             .catch((err) => {
               console.log(err);
-              return res.send(err);
             });
         })
         .catch((er) => {
           console.log(er);
-          return res.send(er);
         });
     }
     await res.json({
       success: true,
+      time: new Date().getTime()
     });
   });
 };
