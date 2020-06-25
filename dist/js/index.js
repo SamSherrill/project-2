@@ -33,7 +33,10 @@ $(document).ready(function () {
       //compares games
       await $.post("/sharedGames", {
         usersArray,
-      }).done((res) => $("html").html(res));
+      }).done((res) => {
+        $("#shared-games-container").empty();
+        $("#shared-games-container").append(res);
+      });
     } else {
       // $.post("/api/steamUsers", {
       //   user: userOne,

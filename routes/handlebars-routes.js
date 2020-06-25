@@ -173,7 +173,7 @@ module.exports = function (app) {
           gamesArray.includes(game)
         );
       }
-      res.render("SteamUser", {
+      res.render("partials/shared-games-block", {
         user: usersArray,
         sharedGames: sharedGamesArray
       });

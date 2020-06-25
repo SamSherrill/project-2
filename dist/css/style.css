@@ -38,17 +38,6 @@ td{
   color: lightgrey;
 }
 
-.footer {
-  background-color: #171a21;
-  color: white;
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  padding: 10px;
-  font-size: smaller;
-}
-
 .website-title {
   color: lightgrey;
 }
