@@ -22,8 +22,7 @@
 </nav>
 
 <div class="container input-container">
-    <h1 class="error-type">{{error.type}}</h1>
-    <p class="error-message">{{error.message}}</p>
+    <div id="errors"></div>
     <div class="columns">
         <div class="column">
             <div class="field" id="primary-user-input">
@@ -32,17 +31,14 @@
                         placeholder="Your Steam Vanity URL">
                 </div>
             </div>
+            <div id="additional-user-input"></div>
         </div>
     </div>
     <div>
-        <a>
             <button class="button" id="add-user">Add User</button>
-        </a>
     </div>
     <div>
-        <a>
-            <input class="button username-submit" type="submit" value="Compare Games">
-        </a>
+            <button class="button username-submit" type="submit">Compare Games</button>
     </div>
 </div>
 

@@ -10,12 +10,14 @@ module.exports = function (app) {
 
   function getUserInfo(apiKey, user, cb) {
     const queryVanityUrl = `http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${apiKey}&vanityurl=${user}`;
-    console.log(`=============${queryVanityUrl}===============`)
+    console.log(`=============${queryVanityUrl}===============`);
 
     axios
       .get(queryVanityUrl)
       .then(function (res) {
-        console.log(`============RETRIEVED ID: ${res.data.response.steamid}================`)
+        if (res.data.response.steamid === undefined) {
+          return cb(undefined);
+        }
         let userId = res.data.response.steamid;
         const querySteamUserUrl = `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${apiKey}&steamids=${userId}`;
         axios
@@ -51,8 +53,8 @@ module.exports = function (app) {
   });
 
   app.post("/api/steamUsers", async function (req, res) {
-    console.log('============running /api/steamUsers route===========');
-    const createdUsers = [];
+    const notFoundUsers = [];
+    let userNotFound = false;
     await req.body.usersArray.forEach(async (user) => {
       await db.SteamUser.findOne({
         where: {
@@ -60,19 +62,31 @@ module.exports = function (app) {
         },
       }).then((dbUser) => {
         if (!dbUser) {
-          getUserInfo(apiKey, user, async (user) => {
-            await db.SteamUser.create(user).then(function (dbPost) {
+          getUserInfo(apiKey, user, async (newUser) => {
+            if (newUser === undefined) {
+              console.log(
+                `====================THENEWUSER: ${newUser}=================`
+              );
+              notFoundUsers.push(user);
+              console.log(
+                `====================NOTFOUNDUSERS: ${notFoundUsers}=================`
+              );
+              userNotFound = true;
+            }
+            await db.SteamUser.create(newUser).then(function (dbPost) {
               createdUsers.push(dbPost);
             });
           });
-          console.log(`************creating user ${user} at ${new Date().getTime()}`)
         } else {
           console.log("user already exists!");
         }
       });
-      console.log("/api/steamUsers iteration for: ", user);
     });
-    return await res.json({time: `${new Date().getTime()} ***************`});
+    setTimeout(()=>{res.json({
+      userNotFound: userNotFound,
+      notFoundUsers: notFoundUsers,
+    })},1000);
+    
   });
 
   app.get("/api/steamUsers", function (req, res) {
@@ -164,7 +178,7 @@ module.exports = function (app) {
       }
       res.render("partials/shared-games-block", {
         user: usersArray,
-        sharedGames: sharedGamesArray
+        sharedGames: sharedGamesArray,
       });
     });
   });

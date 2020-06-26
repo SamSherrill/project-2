@@ -7,7 +7,7 @@ $(document).ready(function () {
     additionalUsers++;
     const newUserElementId = `user${additionalUsers}`;
     usersToSearch.push(newUserElementId);
-    $("#primary-user-input").after(
+    $("#additional-user-input").append(
       `<div class="field"><div class="control"><input class="input is-primary input-left" id="${newUserElementId}" type="text" placeholder="Another Steam Vanity URL"></div></div>`
     );
   };
@@ -15,6 +15,7 @@ $(document).ready(function () {
 
   $(".username-submit").on("click", async function (event) {
     event.preventDefault();
+    $("#errors").empty();
     const usersArray = [];
     usersToSearch.forEach((user) => {
       if ($(`#${user}`).val().length > 0) {
@@ -25,6 +26,11 @@ $(document).ready(function () {
       //adds users to db
       await $.post("/api/steamUsers", {
         usersArray,
+      }).then(res=>{
+        console.log(res);
+        if(res.userNotFound){
+          $("#errors").append(`<h1 class="error-type">Could not load games for users: ${res.notFoundUsers}</h1><p class="error-message">Vanity URL is invalid or user's privacy settings prevent access to game library</p>`)
+        }
       });
       //adds users games to db
       await $.post("/api/games", {
