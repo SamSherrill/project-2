@@ -64,13 +64,7 @@ module.exports = function (app) {
         if (!dbUser) {
           getUserInfo(apiKey, user, async (newUser) => {
             if (newUser === undefined) {
-              console.log(
-                `====================THENEWUSER: ${newUser}=================`
-              );
               notFoundUsers.push(user);
-              console.log(
-                `====================NOTFOUNDUSERS: ${notFoundUsers}=================`
-              );
               userNotFound = true;
             }
             await db.SteamUser.create(newUser).then(function (dbPost) {

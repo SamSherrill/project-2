@@ -53,7 +53,7 @@ $(document).ready(function () {
           if (res.userNotFound) {
             $("#shared-games-container").empty();
             return $("#errors").append(
-              `<h1 class="error-type">Vanity URLs invalid for users: ${res.notFoundUsers}</h1><p class="error-message">Make sure to use the user's vanity URL: <a href="https://steamcommunity.com/discussions/forum/1/537402115094224389/">How to find Steam vanity URL</a></p>`
+              `<h1 class="error-type">Vanity URLs invalid or privacy settings preventing access for users: ${res.notFoundUsers}</h1><p class="error-message">Make sure privacy settings are public for the Steam profile. Make sure to use the user's vanity URL: <a href="https://steamcommunity.com/discussions/forum/1/537402115094224389/">How to find Steam vanity URL</a> </p>`
             );
           }
           $.post("/api/games", {
