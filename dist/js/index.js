@@ -27,10 +27,12 @@ $(document).ready(function () {
       //adds users to db
       await $.post("/api/steamUsers", {
         usersArray,
-      }).then(res=>{
+      }).then((res) => {
         console.log(res);
-        if(res.userNotFound){
-          $("#errors").append(`<h1 class="error-type">Vanity URLs invalid for users: ${res.notFoundUsers}</h1><p class="error-message">Vanity URL is invalid.</p>`)
+        if (res.userNotFound) {
+          $("#errors").append(
+            `<h1 class="error-type">Vanity URLs invalid for users: ${res.notFoundUsers}</h1><p class="error-message">Make sure to use the user's vanity URL: <a href="https://steamcommunity.com/discussions/forum/1/537402115094224389/">How to find Steam vanity URL</a></p>`
+          );
         }
       });
       //adds users games to db
@@ -44,21 +46,26 @@ $(document).ready(function () {
         $("#shared-games-container").empty().append(res);
       });
     } else {
-      // $.post("/api/steamUsers", {
-      //   user: userOne,
-      // })
-      //   .done(
-      //     $.get("/SteamUser/" + userOne, {
-      //       userOne: userOne,
-      //     })
-      //       .done(() => {
-      //         $.post("/api/games", {
-      //           user: userOne,
-      //         }).done(() => (window.location.href = "/SteamUser/" + userOne));
-      //       })
-      //       .catch((er) => console.log(er))
-      //   )
-      //   .catch((er) => console.log(er));
+      $.post("/api/steamUsers", {
+        usersArray,
+      })
+        .done((res)=>{
+          if (res.userNotFound) {
+            $("#errors").append(
+              `<h1 class="error-type">Vanity URLs invalid for users: ${res.notFoundUsers}</h1><p class="error-message">Make sure to use the user's vanity URL: <a href="https://steamcommunity.com/discussions/forum/1/537402115094224389/">How to find Steam vanity URL</a></p>`
+            );
+          }
+          $.post("/api/games", {
+            usersArray,
+          })
+            .done(() => {
+              $.get("/SteamUser/" + usersArray[0], {
+                userOne: usersArray[0],
+              }).done(() => (window.location.href = "/SteamUser/" + usersArray[0]));
+            })
+            .catch((er) => console.log(er))
+          })
+        .catch((er) => console.log(er));
     }
   });
 });

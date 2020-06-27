@@ -8,6 +8,10 @@ module.exports = function (app) {
   const axios = require("axios");
   const apiKey = process.env.API_KEY;
 
+  app.get("/", function (req, res) {
+    res.render("index");
+  });
+
   function getUserInfo(apiKey, user, cb) {
     const queryVanityUrl = `http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${apiKey}&vanityurl=${user}`;
     console.log(`=============${queryVanityUrl}===============`);
@@ -47,10 +51,6 @@ module.exports = function (app) {
         console.log(err);
       });
   }
-
-  app.get("/", function (req, res) {
-    res.render("index");
-  });
 
   app.post("/api/steamUsers", async function (req, res) {
     const notFoundUsers = [];
@@ -110,34 +110,27 @@ module.exports = function (app) {
     });
   });
 
-  // app.get("/SteamUser/:username", function (req, res) {
-  //   const user = req.params.username;
-  //   // use sequelize to find the user in our DB
-  //   db.SteamUser.findOne({
-  //     where: {
-  //       vanityUrl: user,
-  //     },
-  //     include: [db.Game],
-  //   })
-  //     .then((user) => {
-  //       user = [{ user: user.dataValues }];
-  //       // check our DB for the user. IF they exist their with their games list,
-  //       // then we display those in the browser with res.render("SteamUser");
-  //       res.render("index", {
-  //         user: user,
-  //       });
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       res.render("index", {
-  //         error: {
-  //           type: "Could not load user.",
-  //           message:
-  //             "Make sure you use the vanity URL. Also make sure all users have there profile's game library set to public in privacy settings.",
-  //         },
-  //       });
-  //     });
-  // });
+  app.get("/SteamUser/:username", function (req, res) {
+    const user = req.params.username;
+    // use sequelize to find the user in our DB
+    db.SteamUser.findOne({
+      where: {
+        vanityUrl: user,
+      },
+      include: [db.Game],
+    })
+      .then((user) => {
+        user = [{ user: user.dataValues }];
+        // check our DB for the user. IF they exist their with their games list,
+        // then we display those in the browser with res.render("SteamUser");
+        res.render("index", {
+          user: user,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
 
   async function getUsers(res, usersArray, cb) {
     let retrievedUserArray = [];

@@ -38,6 +38,10 @@ td{
   color: lightgrey;
 }
 
+#single-user-table{
+  margin: auto;
+}
+
 .website-title {
   color: lightgrey;
 }
