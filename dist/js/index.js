@@ -16,7 +16,7 @@ $(document).ready(function () {
   $(".username-submit").on("click", async function (event) {
     event.preventDefault();
     $("#errors").empty();
-    $("#shared-games-container").empty().append('<div class="loader"></div>');
+    $("#shared-games-container").empty().append("<div class='loader'></div>");
     const usersArray = [];
     usersToSearch.forEach((user) => {
       if ($(`#${user}`).val().length > 0) {
@@ -49,7 +49,7 @@ $(document).ready(function () {
       $.post("/api/steamUsers", {
         usersArray,
       })
-        .done((res)=>{
+        .done((res) => {
           if (res.userNotFound) {
             $("#shared-games-container").empty();
             return $("#errors").append(
@@ -62,10 +62,12 @@ $(document).ready(function () {
             .done(() => {
               $.get("/SteamUser/" + usersArray[0], {
                 userOne: usersArray[0],
-              }).done(() => (window.location.href = "/SteamUser/" + usersArray[0]));
+              }).done(
+                () => (window.location.href = "/SteamUser/" + usersArray[0])
+              );
             })
-            .catch((er) => console.log(er))
-          })
+            .catch((er) => console.log(er));
+        })
         .catch((er) => console.log(er));
     }
   });

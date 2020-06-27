@@ -1,5 +1,4 @@
 const db = require("../models");
-const { response } = require("express");
 
 //add vanity URL to user model
 //use it where needed
@@ -43,7 +42,7 @@ module.exports = function (app) {
               console.log("Couldn't find user!");
             }
           })
-          .catch((er) => {
+          .catch(() => {
             console.log("Could not load user information");
           });
       })
@@ -76,11 +75,12 @@ module.exports = function (app) {
         }
       });
     });
-    setTimeout(()=>{res.json({
-      userNotFound: userNotFound,
-      notFoundUsers: notFoundUsers,
-    })},1000);
-    
+    setTimeout(() => {
+      res.json({
+        userNotFound: userNotFound,
+        notFoundUsers: notFoundUsers,
+      });
+    }, 1000);
   });
 
   app.get("/api/steamUsers", function (req, res) {
