@@ -16,6 +16,7 @@ $(document).ready(function () {
   $(".username-submit").on("click", async function (event) {
     event.preventDefault();
     $("#errors").empty();
+    $("#shared-games-container").empty().append('<div class="loader"></div>');
     const usersArray = [];
     usersToSearch.forEach((user) => {
       if ($(`#${user}`).val().length > 0) {
@@ -29,7 +30,7 @@ $(document).ready(function () {
       }).then(res=>{
         console.log(res);
         if(res.userNotFound){
-          $("#errors").append(`<h1 class="error-type">Could not load games for users: ${res.notFoundUsers}</h1><p class="error-message">Vanity URL is invalid or user's privacy settings prevent access to game library</p>`)
+          $("#errors").append(`<h1 class="error-type">Vanity URLs invalid for users: ${res.notFoundUsers}</h1><p class="error-message">Vanity URL is invalid.</p>`)
         }
       });
       //adds users games to db
@@ -40,8 +41,7 @@ $(document).ready(function () {
       await $.post("/sharedGames", {
         usersArray,
       }).done((res) => {
-        $("#shared-games-container").empty();
-        $("#shared-games-container").append(res);
+        $("#shared-games-container").empty().append(res);
       });
     } else {
       // $.post("/api/steamUsers", {
