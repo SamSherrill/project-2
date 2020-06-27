@@ -1,10 +1,10 @@
 module.exports = function (sequelize, DataTypes) {
   const SteamUser = sequelize.define("SteamUser", {
-    personaName: {type: DataTypes.STRING, allowNull: false, unique: true},
+    personaName: DataTypes.STRING,
     steamId: DataTypes.STRING,
     profileUrl: DataTypes.STRING,
     avatarUrl: DataTypes.STRING,
-    vanityUrl: {type: DataTypes.STRING, allowNull: false, unique: true}
+    vanityUrl: DataTypes.STRING
   });
 
   SteamUser.associate = function (models) {
