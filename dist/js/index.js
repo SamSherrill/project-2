@@ -51,7 +51,8 @@ $(document).ready(function () {
       })
         .done((res)=>{
           if (res.userNotFound) {
-            $("#errors").append(
+            $("#shared-games-container").empty();
+            return $("#errors").append(
               `<h1 class="error-type">Vanity URLs invalid for users: ${res.notFoundUsers}</h1><p class="error-message">Make sure to use the user's vanity URL: <a href="https://steamcommunity.com/discussions/forum/1/537402115094224389/">How to find Steam vanity URL</a></p>`
             );
           }
