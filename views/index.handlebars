@@ -22,41 +22,26 @@
 </nav>
 
 <div class="container input-container">
+    <div id="errors"></div>
     <div class="columns">
         <div class="column">
-            <div class="field">
+            <div class="field" id="primary-user-input">
                 <div class="control">
-                    <input class="input is-primary input-left" id="user-one" type="text"
+                    <input class="input is-primary input-left" id="user1" type="text"
                         placeholder="Your Steam Vanity URL">
                 </div>
             </div>
-        </div>
-        <div class="column">
-            <div class="field">
-                <div class="control">
-                    <input class="input is-primary input-right" id="user-two" type="text"
-                        placeholder="Another Steam Vanity URL">
-                </div>
-            </div>
+            <div id="additional-user-input"></div>
         </div>
     </div>
     <div>
-        <a>
-            <input class="button username-submit" type="submit" value="Compare Games">
-        </a>
+            <button class="button" id="add-user">Add User</button>
+    </div>
+    <div>
+            <button class="button username-submit" type="submit">Compare Games</button>
     </div>
 </div>
 
-<div class="container tables-container">
+<div class="container tables-container" id="shared-games-container">
     {{> userone-block}}
 </div>
-
-<footer class="footer">
-    <div class="content has-text-centered">
-        <p>
-            <strong class="website-title"> Steam Library Comparer </strong></br>
-            The source code is licensed
-            <a href="http://opensource.org/licenses/mit-license.php" style="color: grey">MIT</a>.
-        </p>
-    </div>
-</footer>
