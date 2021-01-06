@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/SamSherrill/project-2#readme",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "dotenv": "^8.2.0",
     "eslint": "^4.19.1",
     "express": "^4.17.1",
