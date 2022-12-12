@@ -24,7 +24,7 @@
     "axios": "^0.19.2",
     "dotenv": "^8.2.0",
     "eslint": "^4.19.1",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-handlebars": "^3.1.0",
     "handlebars": "^4.5.3",
     "mysql2": "^2.1.0",
